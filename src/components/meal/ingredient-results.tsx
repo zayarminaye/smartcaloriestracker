@@ -59,14 +59,18 @@ export function IngredientResults({
   }
 
   const calculateNutrition = (ingredient: IngredientResult, portionG: number) => {
-    if (!ingredient.database_match) return null
-
     const multiplier = portionG / 100
+
+    // Use database match if available, otherwise use AI estimate
+    const nutritionSource = ingredient.database_match || (ingredient as any).ai_estimate
+
+    if (!nutritionSource) return null
+
     return {
-      calories: Math.round(ingredient.database_match.calories_per_100g * multiplier),
-      protein: (ingredient.database_match.protein_g * multiplier).toFixed(1),
-      fat: (ingredient.database_match.fat_g * multiplier).toFixed(1),
-      carbs: (ingredient.database_match.carbs_g * multiplier).toFixed(1)
+      calories: Math.round(nutritionSource.calories_per_100g * multiplier),
+      protein: (nutritionSource.protein_g * multiplier).toFixed(1),
+      fat: (nutritionSource.fat_g * multiplier).toFixed(1),
+      carbs: (nutritionSource.carbs_g * multiplier).toFixed(1)
     }
   }
 
@@ -126,111 +130,95 @@ export function IngredientResults({
         </div>
       </div>
 
-      {/* Ingredients List */}
-      <div className="space-y-3">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white px-2">
-          {language === 'mm' ? 'ပါဝင်ပစ္စည်းများ' : 'Ingredients'}
-        </h3>
+      {/* Ingredients List - Compact */}
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-md overflow-hidden">
+        <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
+          <h3 className="text-base font-semibold text-gray-900 dark:text-white">
+            {language === 'mm' ? 'ပါဝင်ပစ္စည်းများ' : 'Ingredients'}
+          </h3>
+        </div>
 
-        {result.ingredients.map((ingredient, index) => {
-          const portion = portions[ingredient.name_en]
-          const nutrition = calculateNutrition(ingredient, portion)
+        <div className="divide-y divide-gray-100 dark:divide-gray-800">
+          {result.ingredients.map((ingredient, index) => {
+            const portion = portions[ingredient.name_en]
+            const nutrition = calculateNutrition(ingredient, portion)
 
-          return (
-            <div
-              key={index}
-              className={cn(
-                "bg-white dark:bg-gray-900 rounded-2xl p-5 shadow-md",
-                "border-2",
-                ingredient.matched
-                  ? "border-green-200 dark:border-green-900"
-                  : "border-orange-200 dark:border-orange-900"
-              )}
-            >
-              {/* Ingredient Header */}
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <div className="flex items-center gap-2 mb-1">
+            return (
+              <div
+                key={index}
+                className={cn(
+                  "px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors",
+                  !ingredient.matched && "bg-orange-50/30 dark:bg-orange-900/10"
+                )}
+              >
+                {/* Single Row Layout */}
+                <div className="flex items-center gap-3">
+                  {/* Status Icon */}
+                  <div className="flex-shrink-0">
                     {ingredient.matched ? (
-                      <Check className="w-4 h-4 text-green-500" />
+                      <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      </div>
                     ) : (
-                      <AlertCircle className="w-4 h-4 text-orange-500" />
+                      <div className="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                        <AlertCircle className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                      </div>
                     )}
-                    <h4 className="font-semibold text-gray-900 dark:text-white">
-                      {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
-                    </h4>
                   </div>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {language === 'mm' ? ingredient.name_en : ingredient.name_mm}
-                  </p>
-                  {!ingredient.matched && (
-                    <span className="inline-block mt-2 text-xs px-2 py-1 bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 rounded-full">
-                      {language === 'mm' ? 'ခန့်မှန်းချက်' : 'Estimated'} • {Math.round(ingredient.confidence * 100)}%
+
+                  {/* Name */}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium text-gray-900 dark:text-white text-sm truncate">
+                      {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                      {language === 'mm' ? ingredient.name_en : ingredient.name_mm}
+                    </div>
+                  </div>
+
+                  {/* Portion Adjuster */}
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => updatePortion(ingredient.name_en, -10)}
+                      className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
+                    >
+                      <Minus className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
+                    </button>
+
+                    <span className="font-semibold text-gray-900 dark:text-white text-sm min-w-[50px] text-center">
+                      {portion}g
                     </span>
+
+                    <button
+                      onClick={() => updatePortion(ingredient.name_en, 10)}
+                      className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
+                    >
+                      <Plus className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
+                    </button>
+                  </div>
+
+                  {/* Nutrition Summary */}
+                  {nutrition ? (
+                    <div className="flex items-center gap-2 text-xs">
+                      <div className="text-right">
+                        <span className="font-semibold text-gray-900 dark:text-white">{nutrition.calories}</span>
+                        <span className="text-gray-500 dark:text-gray-400 ml-0.5">kcal</span>
+                      </div>
+                      <div className="h-4 w-px bg-gray-300 dark:bg-gray-600" />
+                      <div className="text-gray-600 dark:text-gray-400">
+                        P:{nutrition.protein}g F:{nutrition.fat}g C:{nutrition.carbs}g
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-orange-600 dark:text-orange-400">
+                      {language === 'mm' ? 'ခန့်မှန်းချက်' : 'AI Est.'}
+                    </div>
                   )}
                 </div>
-
-                {ingredient.database_match && (
-                  <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-800 rounded-full text-gray-600 dark:text-gray-400">
-                    {ingredient.database_match.category}
-                  </span>
-                )}
               </div>
-
-              {/* Portion Adjuster */}
-              <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-xl">
-                <div className="flex items-center gap-2">
-                  <Scale className="w-4 h-4 text-gray-500" />
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {language === 'mm' ? 'ပမာဏ' : 'Portion'}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => updatePortion(ingredient.name_en, -10)}
-                    className="p-1.5 rounded-lg bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    <Minus className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                  </button>
-
-                  <span className="font-semibold text-gray-900 dark:text-white min-w-[60px] text-center">
-                    {portion}g
-                  </span>
-
-                  <button
-                    onClick={() => updatePortion(ingredient.name_en, 10)}
-                    className="p-1.5 rounded-lg bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
-                  >
-                    <Plus className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Nutrition Info */}
-              {nutrition && (
-                <div className="grid grid-cols-4 gap-2 mt-3">
-                  <div className="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">kcal</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{nutrition.calories}</div>
-                  </div>
-                  <div className="text-center p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Protein</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{nutrition.protein}g</div>
-                  </div>
-                  <div className="text-center p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Fat</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{nutrition.fat}g</div>
-                  </div>
-                  <div className="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="text-xs text-gray-600 dark:text-gray-400">Carbs</div>
-                    <div className="font-semibold text-gray-900 dark:text-white">{nutrition.carbs}g</div>
-                  </div>
-                </div>
-              )}
-            </div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
       {/* Action Buttons */}

@@ -29,20 +29,28 @@ export async function extractIngredientsFromText(
   dishText: string,
   language: 'mm' | 'en' = 'mm'
 ): Promise<IngredientExtraction> {
-  const prompt = `You are a Myanmar food expert. Analyze this dish description and extract ingredients.
+  const prompt = `Extract ingredients from this dish. Return ONLY valid JSON, no other text.
 
 Dish: "${dishText}"
 
-Instructions:
-1. Identify all main ingredients (ignore minor spices/seasonings)
-2. Provide both Myanmar (Unicode) and English names
-3. Estimate typical portion size in grams for each ingredient
-4. Determine cooking method if mentioned
-5. Assign confidence score (0.0-1.0)
+RULES:
+1. Extract ingredients that have significant calories (>10 cal per serving)
+2. Include typical cooking ingredients:
+   - Curries (ဟင်း): protein + vegetables + cooking oil + onions
+   - Fried (ကြော်): main item + cooking oil
+   - Salads (သုတ်): vegetables + dressing + nuts/beans
+   - Noodles/rice: noodles/rice + protein + vegetables + oil
+3. Use common Myanmar ingredient names that exist in food databases
+4. For each ingredient:
+   - name_mm: Myanmar Unicode name (common database name)
+   - name_en: English name (use standard USDA/nutrition database terms)
+   - estimated_portion_g: typical serving size in grams
+   - confidence: 0.6-1.0 (high=mentioned, medium=inferred from dish type)
 
-Return ONLY a valid JSON object in this exact format:
+RESPONSE FORMAT (JSON only):
 {
-  "dish_name": "dish name in ${language === 'mm' ? 'Myanmar' : 'English'}",
+  "dish_name": "${language === 'mm' ? 'Myanmar name' : 'English name'}",
+  "cooking_method": "curry|fried|grilled|steamed|soup|salad",
   "ingredients": [
     {
       "name_mm": "ကြက်သား",
@@ -50,11 +58,11 @@ Return ONLY a valid JSON object in this exact format:
       "estimated_portion_g": 150,
       "confidence": 0.95
     }
-  ],
-  "cooking_method": "curry" or "fried" or "grilled" etc
+  ]
 }
 
-Focus on common Myanmar ingredients. Be specific (e.g., "Chicken Breast" not just "Chicken").`
+DO NOT include: salt, turmeric, chili powder, garlic, ginger (too small amounts).
+DO include: meat, fish, eggs, rice, noodles, vegetables, oil, beans, nuts.`
 
   try {
     const result = await model.generateContent(prompt)
