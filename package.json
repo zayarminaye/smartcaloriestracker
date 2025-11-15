@@ -17,7 +17,7 @@
     "react-dom": "^18.3.1",
     "@supabase/supabase-js": "^2.39.7",
     "@supabase/auth-helpers-nextjs": "^0.9.0",
-    "@google/generative-ai": "^0.21.0",
+    "@google/generative-ai": "^0.22.0",
     "framer-motion": "^11.0.8",
     "zustand": "^4.5.0",
     "date-fns": "^3.3.1",
