@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { supabaseAdmin } from '@/lib/supabase/server'
 
 /**
  * Get popular dish templates
@@ -10,8 +10,8 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get('limit') || '20')
 
   try {
-    let query = supabase
-      .from('dish_templates')
+    let query = (supabaseAdmin
+      .from('dish_templates') as any)
       .select('*')
       .eq('is_public', true)
       .order('popularity_score', { ascending: false })

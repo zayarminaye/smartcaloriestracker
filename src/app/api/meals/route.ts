@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { supabaseAdmin } from '@/lib/supabase/server'
 import { estimateNutrition } from '@/lib/ai/gemini'
+import { Database } from '@/types/database'
+
+type MealInsert = Database['public']['Tables']['meals']['Insert']
+type MealItemInsert = Database['public']['Tables']['meal_items']['Insert']
 
 /**
  * Save a meal with its ingredients to the database
@@ -24,15 +28,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 1: Create the meal record
-    const { data: meal, error: mealError } = await supabase
-      .from('meals')
-      .insert({
-        user_id,
-        meal_name,
-        meal_type: meal_type || 'other',
-        eaten_at: eaten_at || new Date().toISOString(),
-        ai_generated: true
-      })
+    const mealData: MealInsert = {
+      user_id,
+      meal_name,
+      meal_type: meal_type || 'other',
+      eaten_at: eaten_at || new Date().toISOString(),
+      ai_generated: true
+    }
+
+    const { data: meal, error: mealError} = await (supabaseAdmin
+      .from('meals') as any)
+      .insert(mealData)
       .select()
       .single()
 
@@ -98,7 +104,7 @@ export async function POST(request: NextRequest) {
           }
         }
 
-        return {
+        const mealItem: MealItemInsert = {
           meal_id: meal.id,
           ingredient_id: ingredientId, // null for unmatched ingredients
           portion_grams: portion_g,
@@ -111,15 +117,17 @@ export async function POST(request: NextRequest) {
           ai_suggested: true,
           user_confirmed: true
         }
+
+        return mealItem
       })
     )
 
     // All items are now valid (either from DB or AI estimation)
-    const validMealItems = mealItems
+    const validMealItems: MealItemInsert[] = mealItems
 
     if (validMealItems.length === 0) {
       // Clean up the meal if no valid ingredients
-      await supabase.from('meals').delete().eq('id', meal.id)
+      await (supabaseAdmin.from('meals') as any).delete().eq('id', meal.id)
       return NextResponse.json(
         { error: 'No valid ingredients with nutrition data found' },
         { status: 400 }
@@ -127,14 +135,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert meal items
-    const { error: itemsError } = await supabase
-      .from('meal_items')
+    const { error: itemsError } = await (supabaseAdmin
+      .from('meal_items') as any)
       .insert(validMealItems)
 
     if (itemsError) {
       console.error('Meal items creation error:', itemsError)
       // Clean up the meal
-      await supabase.from('meals').delete().eq('id', meal.id)
+      await (supabaseAdmin.from('meals') as any).delete().eq('id', meal.id)
       return NextResponse.json(
         { error: 'Failed to create meal items', details: itemsError.message },
         { status: 500 }
@@ -142,8 +150,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 3: Fetch the complete meal with updated totals (triggers will have run)
-    const { data: completeMeal } = await supabase
-      .from('meals')
+    const { data: completeMeal } = await (supabaseAdmin
+      .from('meals') as any)
       .select(`
         *,
         meal_items (
@@ -188,8 +196,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Get meals for the specified date
-    const { data: meals, error } = await supabase
-      .from('meals')
+    const { data: meals, error } = await (supabaseAdmin
+      .from('meals') as any)
       .select(`
         *,
         meal_items (

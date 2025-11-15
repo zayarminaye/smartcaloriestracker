@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { extractIngredientsFromText, estimateNutrition } from '@/lib/ai/gemini'
-import { supabase } from '@/lib/supabase/client'
+import { supabaseAdmin } from '@/lib/supabase/server'
 
 /**
  * AI-powered ingredient extraction from dish description
@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
     const enrichedIngredients = await Promise.all(
       extraction.ingredients.map(async (item) => {
         // Search database for matching ingredient
-        const { data: matches } = await supabase
-          .from('ingredients')
+        const { data: matches } = await (supabaseAdmin
+          .from('ingredients') as any)
           .select(`
             id,
             name_english,

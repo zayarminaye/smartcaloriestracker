@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { supabaseAdmin } from '@/lib/supabase/server'
 
 /**
  * Search ingredients by name (Myanmar or English)
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Search in both Myanmar and English names
-    const { data: results, error } = await supabase
-      .from('ingredients')
+    const { data: results, error } = await (supabaseAdmin
+      .from('ingredients') as any)
       .select(`
         id,
         name_english,
