@@ -215,9 +215,9 @@ export function IngredientResults({
                 )}
               >
                 {/* Single Row Layout */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
                   {/* Status Icon */}
-                  <div className="flex-shrink-0">
+                  <div className="flex-shrink-0 w-6">
                     {ingredient.matched ? (
                       <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
                         <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -230,7 +230,7 @@ export function IngredientResults({
                   </div>
 
                   {/* Name */}
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 max-w-[180px]">
                     <div className="font-medium text-gray-900 dark:text-white text-sm truncate">
                       {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
                     </div>
@@ -240,7 +240,7 @@ export function IngredientResults({
                   </div>
 
                   {/* Portion Adjuster */}
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
                     <button
                       onClick={() => updatePortion(ingredient.name_en, -10)}
                       className="w-7 h-7 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 flex items-center justify-center transition-colors"
@@ -248,7 +248,7 @@ export function IngredientResults({
                       <Minus className="w-3.5 h-3.5 text-gray-600 dark:text-gray-400" />
                     </button>
 
-                    <span className="font-semibold text-gray-900 dark:text-white text-sm min-w-[50px] text-center">
+                    <span className="font-semibold text-gray-900 dark:text-white text-sm min-w-[55px] text-center">
                       {portion}g
                     </span>
 
@@ -262,18 +262,18 @@ export function IngredientResults({
 
                   {/* Nutrition Summary */}
                   {nutrition ? (
-                    <div className="flex items-center gap-2 text-xs">
-                      <div className="text-right">
+                    <div className="flex items-center gap-2 text-xs min-w-[220px] flex-shrink-0">
+                      <div className="text-right min-w-[60px]">
                         <span className="font-semibold text-gray-900 dark:text-white">{nutrition.calories}</span>
                         <span className="text-gray-500 dark:text-gray-400 ml-0.5">kcal</span>
                       </div>
                       <div className="h-4 w-px bg-gray-300 dark:bg-gray-600" />
-                      <div className="text-gray-600 dark:text-gray-400">
+                      <div className="text-gray-600 dark:text-gray-400 whitespace-nowrap">
                         P:{nutrition.protein}g F:{nutrition.fat}g C:{nutrition.carbs}g
                       </div>
                     </div>
                   ) : (
-                    <div className="text-xs text-orange-600 dark:text-orange-400">
+                    <div className="text-xs text-orange-600 dark:text-orange-400 min-w-[220px] flex-shrink-0">
                       {language === 'mm' ? 'ခန့်မှန်းချက်' : 'AI Est.'}
                     </div>
                   )}
@@ -281,7 +281,7 @@ export function IngredientResults({
                   {/* Remove Button */}
                   <button
                     onClick={() => removeIngredient(ingredient.name_en)}
-                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 flex-shrink-0"
                     title={language === 'mm' ? 'ဖယ်ရှားမည်' : 'Remove'}
                   >
                     <X className="w-4 h-4" />
