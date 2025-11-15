@@ -2,9 +2,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
-// Model optimized for Burmese/Myanmar text
-// Using gemini-pro (stable) - also works great with Myanmar language
-const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
+// Using Gemini 1.5 Flash - Fast, efficient, great for Myanmar text
+// Free tier: Up to 15 requests per minute, 1 million requests per day
+const model = genAI.getGenerativeModel({
+  model: 'gemini-1.5-flash-latest'
+})
 
 export interface IngredientExtraction {
   ingredients: Array<{
