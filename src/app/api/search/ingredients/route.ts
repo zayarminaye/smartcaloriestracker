@@ -2,55 +2,48 @@ import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase/client'
 
 /**
- * Smart ingredient search with auto-complete
- * Supports both Myanmar and English
- * Returns top 10 most relevant results
+ * Search ingredients by name (Myanmar or English)
  */
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams
-  const query = searchParams.get('q')
-  const language = searchParams.get('lang') || 'mm'
-  const limit = parseInt(searchParams.get('limit') || '10')
-
-  if (!query || query.length < 2) {
-    return NextResponse.json({ ingredients: [] })
-  }
-
   try {
-    let searchQuery = supabase
+    const { searchParams } = new URL(request.url)
+    const query = searchParams.get('q')
+
+    if (!query || query.length < 2) {
+      return NextResponse.json(
+        { error: 'Query must be at least 2 characters' },
+        { status: 400 }
+      )
+    }
+
+    // Search in both Myanmar and English names
+    const { data: results, error } = await supabase
       .from('ingredients')
       .select(`
         id,
         name_english,
         name_myanmar,
         category,
-        subcategory,
         calories_per_100g,
         protein_g,
         fat_g,
         carbs_g,
-        fiber_g,
-        usage_count,
-        image_url
+        fiber_g
       `)
+      .or(`name_myanmar.ilike.%${query}%,name_english.ilike.%${query}%`)
       .is('deleted_at', null)
+      .order('usage_count', { ascending: false })
+      .limit(20)
 
-    // Search based on language
-    if (language === 'mm') {
-      // Myanmar text search
-      searchQuery = searchQuery.or(`name_myanmar.ilike.%${query}%,category.ilike.%${query}%`)
-    } else {
-      // English text search
-      searchQuery = searchQuery.or(`name_english.ilike.%${query}%,category.ilike.%${query}%`)
+    if (error) {
+      console.error('Search error:', error)
+      return NextResponse.json(
+        { error: 'Search failed', details: error.message },
+        { status: 500 }
+      )
     }
 
-    const { data: ingredients, error } = await searchQuery
-      .order('usage_count', { ascending: false }) // Popular items first
-      .limit(limit)
-
-    if (error) throw error
-
-    return NextResponse.json({ ingredients })
+    return NextResponse.json({ results: results || [] })
   } catch (error: any) {
     console.error('Search error:', error)
     return NextResponse.json(
