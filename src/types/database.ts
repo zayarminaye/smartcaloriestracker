@@ -297,7 +297,7 @@ export interface Database {
         Row: {
           id: string
           meal_id: string
-          ingredient_id: string
+          ingredient_id: string | null
           cooking_method_id: string | null
           portion_grams: number
           portion_description: string | null
@@ -314,7 +314,7 @@ export interface Database {
         Insert: {
           id?: string
           meal_id: string
-          ingredient_id: string
+          ingredient_id?: string | null
           cooking_method_id?: string | null
           portion_grams: number
           portion_description?: string | null
@@ -331,7 +331,7 @@ export interface Database {
         Update: {
           id?: string
           meal_id?: string
-          ingredient_id?: string
+          ingredient_id?: string | null
           cooking_method_id?: string | null
           portion_grams?: number
           portion_description?: string | null
