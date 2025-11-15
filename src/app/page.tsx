@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { CalorieRing } from '@/components/dashboard/calorie-ring'
 import { MacroBars } from '@/components/dashboard/macro-bars'
@@ -13,50 +13,85 @@ import {
   Plus,
   ChevronRight,
   Utensils,
-  Sparkles
+  Sparkles,
+  Loader2
 } from 'lucide-react'
 import { cn, getMealEmoji, formatDate } from '@/lib/utils'
 
 export default function HomePage() {
   const router = useRouter()
   const [language, setLanguage] = useState<'mm' | 'en'>('mm')
+  const [todaysMeals, setTodaysMeals] = useState<any[]>([])
+  const [dailyStats, setDailyStats] = useState({
+    currentCalories: 0,
+    totalProtein: 0,
+    totalFat: 0,
+    totalCarbs: 0
+  })
+  const [isLoading, setIsLoading] = useState(true)
 
-  // Mock user data (will be replaced with real data from Supabase)
+  // TODO: Get from authentication
+  const TEST_USER_ID = '00000000-0000-0000-0000-000000000000'
   const userData = {
-    name: language === 'mm' ? 'မင်းသား' : 'Min Thar',
+    name: language === 'mm' ? 'စမ်းသပ်သူ' : 'Test User',
     dailyTarget: 2000,
-    currentCalories: 1245,
-    protein: { current: 65, target: 150 },
-    fat: { current: 42, target: 67 },
-    carbs: { current: 145, target: 250 },
-    streak: 7,
-    level: 3,
-    points: 2850
+    currentCalories: dailyStats.currentCalories,
+    protein: { current: dailyStats.totalProtein, target: 150 },
+    fat: { current: dailyStats.totalFat, target: 67 },
+    carbs: { current: dailyStats.totalCarbs, target: 250 },
+    streak: 0,
+    level: 1,
+    points: 0
   }
 
-  const todaysMeals = [
-    {
-      id: '1',
-      type: 'breakfast',
-      name: language === 'mm' ? 'မုန့်ဟင်းခါး' : 'Mohinga',
-      calories: 450,
-      time: '08:30 AM'
-    },
-    {
-      id: '2',
-      type: 'snack',
-      name: language === 'mm' ? 'ကော်ပြန့်ကြော်' : 'Spring Roll',
-      calories: 180,
-      time: '11:00 AM'
-    },
-    {
-      id: '3',
-      type: 'lunch',
-      name: language === 'mm' ? 'ကြက်သား ဟင်း' : 'Chicken Curry',
-      calories: 615,
-      time: '01:30 PM'
+  // Fetch today's meals on component mount
+  useEffect(() => {
+    fetchTodaysMeals()
+  }, [])
+
+  const fetchTodaysMeals = async () => {
+    setIsLoading(true)
+    try {
+      const today = new Date().toISOString().split('T')[0]
+      const response = await fetch(`/api/meals?user_id=${TEST_USER_ID}&date=${today}`)
+      const data = await response.json()
+
+      if (response.ok && data.meals) {
+        // Transform meals to match UI format
+        const formattedMeals = data.meals.map((meal: any) => ({
+          id: meal.id,
+          type: meal.meal_type,
+          name: meal.meal_name || (language === 'mm' ? 'အစားအစာ' : 'Meal'),
+          calories: Math.round(meal.total_calories || 0),
+          time: new Date(meal.eaten_at).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        }))
+
+        setTodaysMeals(formattedMeals)
+
+        // Calculate daily totals
+        const totals = data.meals.reduce((acc: any, meal: any) => ({
+          currentCalories: acc.currentCalories + (meal.total_calories || 0),
+          totalProtein: acc.totalProtein + (meal.total_protein_g || 0),
+          totalFat: acc.totalFat + (meal.total_fat_g || 0),
+          totalCarbs: acc.totalCarbs + (meal.total_carbs_g || 0)
+        }), {
+          currentCalories: 0,
+          totalProtein: 0,
+          totalFat: 0,
+          totalCarbs: 0
+        })
+
+        setDailyStats(totals)
+      }
+    } catch (error) {
+      console.error('Failed to fetch meals:', error)
+    } finally {
+      setIsLoading(false)
     }
-  ]
+  }
 
   const handleSelectTemplate = (template: any) => {
     console.log('Selected template:', template)
@@ -207,26 +242,53 @@ export default function HomePage() {
           </div>
 
           <div className="space-y-3">
-            {todaysMeals.map((meal) => (
-              <button
-                key={meal.id}
-                className={cn(
-                  "w-full flex items-center justify-between",
-                  "p-4 rounded-xl",
-                  "bg-gray-50 dark:bg-gray-800",
-                  "hover:bg-gray-100 dark:hover:bg-gray-700",
-                  "transition-colors duration-200",
-                  "text-left group"
-                )}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="text-3xl">
-                    {getMealEmoji(meal.type)}
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900 dark:text-white">
-                      {meal.name}
-                    </h4>
+            {isLoading ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <Loader2 className="w-8 h-8 text-primary animate-spin mb-3" />
+                <p className="text-gray-500 dark:text-gray-400">
+                  {language === 'mm' ? 'အစားအသောက်များ ရှာနေသည်...' : 'Loading meals...'}
+                </p>
+              </div>
+            ) : todaysMeals.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="text-6xl mb-4">🍽️</div>
+                <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  {language === 'mm' ? 'ယနေ့ မှတ်တမ်း မရှိသေးပါ' : 'No meals logged today'}
+                </h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+                  {language === 'mm'
+                    ? 'သင်စားသော အစားအစာကို ထည့်သွင်းပါ'
+                    : 'Start tracking by adding your first meal'}
+                </p>
+                <button
+                  onClick={() => router.push('/add-meal')}
+                  className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors flex items-center gap-2"
+                >
+                  <Plus className="w-5 h-5" />
+                  {language === 'mm' ? 'အစားအသောက် ထည့်မည်' : 'Add Meal'}
+                </button>
+              </div>
+            ) : (
+              todaysMeals.map((meal) => (
+                <button
+                  key={meal.id}
+                  className={cn(
+                    "w-full flex items-center justify-between",
+                    "p-4 rounded-xl",
+                    "bg-gray-50 dark:bg-gray-800",
+                    "hover:bg-gray-100 dark:hover:bg-gray-700",
+                    "transition-colors duration-200",
+                    "text-left group"
+                  )}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="text-3xl">
+                      {getMealEmoji(meal.type)}
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-gray-900 dark:text-white">
+                        {meal.name}
+                      </h4>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                       {meal.time}
                     </p>
@@ -245,25 +307,28 @@ export default function HomePage() {
                   <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
                 </div>
               </button>
-            ))}
+            ))
+            )}
 
-            {/* Add meal button */}
-            <button
-              onClick={() => router.push('/add-meal')}
-              className={cn(
-                "w-full p-4 rounded-xl",
-                "border-2 border-dashed border-gray-300 dark:border-gray-700",
-                "hover:border-primary hover:bg-primary/5",
-                "transition-all duration-200",
-                "flex items-center justify-center gap-2",
-                "text-gray-600 dark:text-gray-400 hover:text-primary"
-              )}
-            >
-              <Plus className="w-5 h-5" />
-              <span className="font-medium">
-                {language === 'mm' ? 'အစားအသောက် ထပ်ထည့်မည်' : 'Add Another Meal'}
-              </span>
-            </button>
+            {/* Add meal button - show when there are meals already */}
+            {!isLoading && todaysMeals.length > 0 && (
+              <button
+                onClick={() => router.push('/add-meal')}
+                className={cn(
+                  "w-full p-4 rounded-xl",
+                  "border-2 border-dashed border-gray-300 dark:border-gray-700",
+                  "hover:border-primary hover:bg-primary/5",
+                  "transition-all duration-200",
+                  "flex items-center justify-center gap-2",
+                  "text-gray-600 dark:text-gray-400 hover:text-primary"
+                )}
+              >
+                <Plus className="w-5 h-5" />
+                <span className="font-medium">
+                  {language === 'mm' ? 'အစားအသောက် ထပ်ထည့်မည်' : 'Add Another Meal'}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </main>

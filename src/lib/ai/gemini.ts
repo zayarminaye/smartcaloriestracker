@@ -29,16 +29,22 @@ export async function extractIngredientsFromText(
   dishText: string,
   language: 'mm' | 'en' = 'mm'
 ): Promise<IngredientExtraction> {
-  const prompt = `You are a Myanmar food expert. Analyze this dish description and extract ingredients.
+  const prompt = `You are a Myanmar food expert. Analyze this dish description and extract ALL calorie-significant ingredients.
 
 Dish: "${dishText}"
 
 Instructions:
-1. Identify all main ingredients (ignore minor spices/seasonings)
-2. Provide both Myanmar (Unicode) and English names
-3. Estimate typical portion size in grams for each ingredient
-4. Determine cooking method if mentioned
-5. Assign confidence score (0.0-1.0)
+1. Extract ALL main ingredients that contribute significant calories
+2. For curries (ဟင်း), ALWAYS include: main protein, vegetables, cooking oil, onions (unless obviously not used)
+3. For fried dishes (ကြော်), include: main item, cooking oil, flour/batter if applicable
+4. For salads (သုတ်), include: all vegetables, dressing, peanuts/beans
+5. For noodles/rice dishes, include: noodles/rice, protein, vegetables, oil
+6. Provide both Myanmar (Unicode) and English names
+7. Estimate typical portion size in grams for EACH ingredient
+8. Assign confidence score (0.0-1.0) - use lower confidence for inferred ingredients
+
+IMPORTANT: Even if not explicitly mentioned, include typical ingredients based on cooking method.
+Example: "ကြက်သားဟင်း" should include chicken, onions, tomatoes, cooking oil (typical curry ingredients)
 
 Return ONLY a valid JSON object in this exact format:
 {
@@ -46,15 +52,21 @@ Return ONLY a valid JSON object in this exact format:
   "ingredients": [
     {
       "name_mm": "ကြက်သား",
-      "name_en": "Chicken",
+      "name_en": "Chicken pieces",
       "estimated_portion_g": 150,
       "confidence": 0.95
+    },
+    {
+      "name_mm": "ကြက်သွန်နီ",
+      "name_en": "Onions",
+      "estimated_portion_g": 50,
+      "confidence": 0.80
     }
   ],
-  "cooking_method": "curry" or "fried" or "grilled" etc
+  "cooking_method": "curry" or "fried" or "grilled" or "steamed" or "soup" or "salad"
 }
 
-Focus on common Myanmar ingredients. Be specific (e.g., "Chicken Breast" not just "Chicken").`
+Focus on calorie-contributing ingredients only. Ignore minor spices (turmeric, chili powder, salt).`
 
   try {
     const result = await model.generateContent(prompt)

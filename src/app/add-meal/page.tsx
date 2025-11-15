@@ -35,12 +35,52 @@ export default function AddMealPage() {
   }
 
   const handleSave = async (adjustedIngredients: any) => {
-    // TODO: Save to database (meal log with ingredients)
-    console.log('Saving meal with adjusted ingredients:', adjustedIngredients)
-    alert(language === 'mm'
-      ? 'အစားအသောက် မှတ်တမ်းသိမ်းပြီးပါပြီ!'
-      : 'Meal saved successfully!')
-    router.push('/')
+    setIsLoading(true)
+    try {
+      // TODO: Get real user_id from authentication
+      // For now using a test user ID - this should come from Supabase Auth
+      const TEST_USER_ID = '00000000-0000-0000-0000-000000000000' // Replace with real auth
+
+      const response = await fetch('/api/meals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: TEST_USER_ID,
+          meal_name: extractionResult?.dish_name,
+          meal_type: getMealTypeFromTime(), // Auto-detect based on time
+          eaten_at: new Date().toISOString(),
+          ingredients: adjustedIngredients
+        })
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to save meal')
+      }
+
+      console.log('Meal saved successfully:', data.meal)
+      alert(language === 'mm'
+        ? 'အစားအသောက် မှတ်တမ်းသိမ်းပြီးပါပြီ!'
+        : 'Meal saved successfully!')
+      router.push('/')
+    } catch (error: any) {
+      console.error('Save error:', error)
+      alert(language === 'mm'
+        ? `မှတ်တမ်းသိမ်း၍မရပါ: ${error.message}`
+        : `Failed to save: ${error.message}`)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Helper function to determine meal type based on current time
+  const getMealTypeFromTime = (): 'breakfast' | 'lunch' | 'dinner' | 'snack' => {
+    const hour = new Date().getHours()
+    if (hour >= 5 && hour < 11) return 'breakfast'
+    if (hour >= 11 && hour < 16) return 'lunch'
+    if (hour >= 16 && hour < 22) return 'dinner'
+    return 'snack'
   }
 
   const handleBack = () => {
