@@ -3,7 +3,8 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 // Model optimized for Burmese/Myanmar text
-const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+// Using gemini-pro (stable) - also works great with Myanmar language
+const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
 export interface IngredientExtraction {
   ingredients: Array<{
