@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase/client'
+import { estimateNutrition } from '@/lib/ai/gemini'
 
 /**
  * Save a meal with its ingredients to the database
@@ -53,40 +54,68 @@ export async function POST(request: NextRequest) {
 
         // Calculate nutrition based on portion
         const multiplier = portion_g / 100
+        let calculatedNutrition
+        let ingredientId = null
+        let confidenceLevel: 'exact' | 'estimated' | 'approximate' | 'guessed' = 'estimated'
 
-        // Use database match if available, otherwise skip (or use AI estimation)
-        if (!ingredient.database_match) {
-          console.warn(`No database match for ingredient: ${ingredient.name_en}`)
-          return null
-        }
+        if (ingredient.database_match) {
+          // Use database nutrition data
+          const dbMatch = ingredient.database_match
+          ingredientId = dbMatch.id
+          calculatedNutrition = {
+            calories: Math.round(dbMatch.calories_per_100g * multiplier * 100) / 100,
+            protein_g: Math.round(dbMatch.protein_g * multiplier * 100) / 100,
+            fat_g: Math.round(dbMatch.fat_g * multiplier * 100) / 100,
+            carbs_g: Math.round(dbMatch.carbs_g * multiplier * 100) / 100,
+            fiber_g: Math.round(dbMatch.fiber_g * multiplier * 100) / 100
+          }
+          confidenceLevel = 'exact'
+        } else {
+          // Use AI estimation for unmatched ingredients
+          console.log(`Using AI estimation for: ${ingredient.name_en}`)
+          try {
+            const aiEstimate = await estimateNutrition(ingredient.name_en, ingredient.category)
 
-        const dbMatch = ingredient.database_match
-        const calculatedNutrition = {
-          calories: Math.round(dbMatch.calories_per_100g * multiplier * 100) / 100,
-          protein_g: Math.round(dbMatch.protein_g * multiplier * 100) / 100,
-          fat_g: Math.round(dbMatch.fat_g * multiplier * 100) / 100,
-          carbs_g: Math.round(dbMatch.carbs_g * multiplier * 100) / 100,
-          fiber_g: Math.round(dbMatch.fiber_g * multiplier * 100) / 100
+            calculatedNutrition = {
+              calories: Math.round(aiEstimate.calories_per_100g * multiplier * 100) / 100,
+              protein_g: Math.round(aiEstimate.protein_g * multiplier * 100) / 100,
+              fat_g: Math.round(aiEstimate.fat_g * multiplier * 100) / 100,
+              carbs_g: Math.round(aiEstimate.carbs_g * multiplier * 100) / 100,
+              fiber_g: Math.round(aiEstimate.fiber_g * multiplier * 100) / 100
+            }
+            confidenceLevel = aiEstimate.confidence > 0.7 ? 'estimated' : 'approximate'
+          } catch (error) {
+            console.error(`AI estimation failed for ${ingredient.name_en}:`, error)
+            // Use conservative defaults if AI fails
+            calculatedNutrition = {
+              calories: Math.round(100 * multiplier * 100) / 100,
+              protein_g: Math.round(5 * multiplier * 100) / 100,
+              fat_g: Math.round(3 * multiplier * 100) / 100,
+              carbs_g: Math.round(15 * multiplier * 100) / 100,
+              fiber_g: Math.round(1 * multiplier * 100) / 100
+            }
+            confidenceLevel = 'guessed'
+          }
         }
 
         return {
           meal_id: meal.id,
-          ingredient_id: dbMatch.id,
+          ingredient_id: ingredientId, // null for unmatched ingredients
           portion_grams: portion_g,
           calories: calculatedNutrition.calories,
           protein_g: calculatedNutrition.protein_g,
           fat_g: calculatedNutrition.fat_g,
           carbs_g: calculatedNutrition.carbs_g,
           fiber_g: calculatedNutrition.fiber_g,
-          confidence_level: ingredient.matched ? 'exact' : 'estimated',
+          confidence_level: confidenceLevel,
           ai_suggested: true,
           user_confirmed: true
         }
       })
     )
 
-    // Filter out null items (ingredients without database match)
-    const validMealItems = mealItems.filter(item => item !== null)
+    // All items are now valid (either from DB or AI estimation)
+    const validMealItems = mealItems
 
     if (validMealItems.length === 0) {
       // Clean up the meal if no valid ingredients

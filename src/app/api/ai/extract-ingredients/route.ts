@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { extractIngredientsFromText } from '@/lib/ai/gemini'
+import { extractIngredientsFromText, estimateNutrition } from '@/lib/ai/gemini'
 import { supabase } from '@/lib/supabase/client'
 
 /**
@@ -43,9 +43,20 @@ export async function POST(request: NextRequest) {
 
         const dbMatch = matches?.[0]
 
+        // If no database match, get AI estimation
+        let aiEstimate = null
+        if (!dbMatch) {
+          try {
+            aiEstimate = await estimateNutrition(item.name_en)
+          } catch (error) {
+            console.error(`AI estimation failed for ${item.name_en}:`, error)
+          }
+        }
+
         return {
           ...item,
           database_match: dbMatch || null,
+          ai_estimate: aiEstimate,
           matched: !!dbMatch
         }
       })
