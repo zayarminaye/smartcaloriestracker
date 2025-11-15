@@ -2,10 +2,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
-// Using Gemini 1.5 Flash - Fast, efficient, great for Myanmar text
+// Using Gemini 2.5 Flash - Fast, efficient, great for Myanmar text
 // Free tier: Up to 15 requests per minute, 1 million requests per day
+// Updated to Gemini 2.5 (Gemini 1.5 models retired in 2025)
 const model = genAI.getGenerativeModel({
-  model: 'gemini-1.5-flash-latest'
+  model: 'gemini-2.5-flash'
 })
 
 export interface IngredientExtraction {
