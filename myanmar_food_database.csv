@@ -1,0 +1,181 @@
+food_id,name_english,name_myanmar,category,subcategory,calories_per_100g_raw,protein_g,fat_g,carbs_g,fiber_g,cooking_method,calories_per_100g_cooked,water_content_percent,notes
+1,White Rice,ထမင်းဖြူ,Grains,Rice,365,7.13,0.66,79.95,1.3,Raw,365,11.62,USDA Source
+2,White Rice,ထမင်းဖြူ,Grains,Rice,365,7.13,0.66,79.95,1.3,Boiled,130,68.7,Water absorbed during cooking
+3,White Rice,ထမင်းဖြူ,Grains,Rice,365,7.13,0.66,79.95,1.3,Fried,168,60,With 1 tbsp oil absorbed
+4,Brown Rice,ထမင်းညို,Grains,Rice,370,7.94,2.92,77.24,3.5,Raw,370,10.37,Higher fiber than white
+5,Brown Rice,ထမင်းညို,Grains,Rice,370,7.94,2.92,77.24,3.5,Boiled,111,73.09,Retains more nutrients
+6,Sticky Rice,ကောက်ညှင်း,Grains,Rice,370,6.81,0.55,81.68,2.4,Raw,370,10.46,Glutinous rice
+7,Sticky Rice,ကောက်ညှင်း,Grains,Rice,370,6.81,0.55,81.68,2.4,Steamed,97,77,Traditional preparation
+8,Rice Noodles,မုန့်ဖတ်,Grains,Noodles,364,5.95,0.56,80.18,1.6,Dry,364,11.91,For mohinga
+9,Rice Noodles,မုန့်ဖတ်,Grains,Noodles,364,5.95,0.56,80.18,1.6,Boiled,109,77,In soup
+10,Wheat Noodles,ခေါက်ဆွဲ,Grains,Noodles,371,10.4,2.15,75.47,2.7,Dry,371,9,Regular noodles
+11,Wheat Noodles,ခေါက်ဆွဲ,Grains,Noodles,371,10.4,2.15,75.47,2.7,Boiled,158,66,Cooked in water
+12,Wheat Noodles,ခေါက်ဆွဲ,Grains,Noodles,371,10.4,2.15,75.47,2.7,Fried,205,55,Stir-fried with oil
+13,Chicken Breast,ကြက်သားရင်,Meat,Poultry,165,31.02,3.57,0,0,Raw,165,65.26,Skinless
+14,Chicken Breast,ကြက်သားရင်,Meat,Poultry,165,31.02,3.57,0,0,Grilled,165,65.26,No added fat
+15,Chicken Breast,ကြက်သားရင်,Meat,Poultry,165,31.02,3.57,0,0,Fried,246,55,Breaded and fried
+16,Chicken Breast,ကြက်သားရင်,Meat,Poultry,165,31.02,3.57,0,0,Curry,210,62,In oil-based curry
+17,Chicken Thigh,ကြက်ပေါင်,Meat,Poultry,209,18.6,14.7,0,0,Raw,209,68.5,With skin
+18,Chicken Thigh,ကြက်ပေါင်,Meat,Poultry,179,24.8,8.2,0,0,Grilled_skinless,179,66.36,Skin removed
+19,Chicken Wings,ကြက်တောင်ပံ,Meat,Poultry,203,30.5,8.1,0,0,Raw,203,65.78,With skin
+20,Chicken Wings,ကြက်တောင်ပံ,Meat,Poultry,203,30.5,8.1,0,0,Fried,290,48,Deep fried
+21,Pork Loin,ဝက်သားနု,Meat,Pork,198,19.74,12.58,0,0,Raw,198,68.93,Lean and fat
+22,Pork Loin,ဝက်သားနု,Meat,Pork,172,31.1,4.7,0,0,Grilled_lean,172,63.5,Lean only
+23,Pork Loin,ဝက်သားနု,Meat,Pork,172,31.1,4.7,0,0,Fried,258,55,Pan-fried with oil
+24,Ground Pork,ဝက်သားညှပ်,Meat,Pork,263,16.88,21.19,0,0,Raw,263,60.5,84% lean
+25,Ground Pork,ဝက်သားညှပ်,Meat,Pork,289,26.9,19.8,0.6,0,Cooked,289,54.86,Crumbled
+26,Pork Belly,ဝက်သားသုံးထပ်သား,Meat,Pork,518,9.34,53,0,0,Raw,518,35.34,Very fatty
+27,Pork Belly,ဝက်သားသုံးထပ်သား,Meat,Pork,496,17.01,46.39,0,0,Roasted,496,40.26,Crispy skin
+28,Beef Sirloin,အမဲသားနု,Meat,Beef,230,27.12,12.71,0,0,Raw,230,59.58,Select grade
+29,Beef Sirloin,အမဲသားနု,Meat,Beef,212,29.33,9.67,0,0,Grilled_lean,212,60.43,Fat trimmed
+30,Ground Beef,အမဲသားညှပ်,Meat,Beef,176,20,10,0,0,Raw_lean,176,69.5,90% lean
+31,Ground Beef,အမဲသားညှပ်,Meat,Beef,254,26.11,15.8,0,0,Cooked,254,55.72,Pan-browned
+32,Tilapia,တီလားပီးယား,Seafood,Fish,96,20.08,1.7,0,0,Raw,96,78.08,Freshwater fish
+33,Tilapia,တီလားပီးယား,Seafood,Fish,128,26.15,2.65,0,0,Grilled,128,73.42,Dry heat
+34,Tilapia,တီလားပီးယား,Seafood,Fish,206,22.9,12.1,0,0,Fried,206,62,Breaded
+35,Catfish,ငါးခူ,Seafood,Fish,105,18.47,2.82,0,0,Raw,105,76.38,Channel catfish
+36,Catfish,ငါးခူ,Seafood,Fish,144,18.44,7.19,0,0,Cooked,144,72.56,Dry heat
+37,Hilsa Fish,ငါးသလောက်,Seafood,Fish,310,21.8,22.04,0,0,Raw,310,55,Local favorite
+38,Hilsa Fish,ငါးသလောက်,Seafood,Fish,320,20.5,24.2,0,0,Curry,320,53,In oil curry
+39,Shrimp,ပုစွန်,Seafood,Shellfish,99,20.91,1.08,0.91,0,Raw,99,74.33,Medium size
+40,Shrimp,ပုစွန်,Seafood,Shellfish,119,22.78,1.73,1.52,0,Boiled,119,73.44,Moist heat
+41,Shrimp,ပုစွန်,Seafood,Shellfish,206,18.35,10.28,9.75,0.3,Fried,206,57.13,Breaded
+42,Prawns,ပုစွန်ကြီး,Seafood,Shellfish,105,20.31,1.73,0.91,0,Raw,105,73.82,Large prawns
+43,Prawns,ပုစွန်ကြီး,Seafood,Shellfish,251,18.3,11.75,16.89,0.9,Tempura,251,51.58,Battered and fried
+44,Crab,ဂဏန်း,Seafood,Shellfish,83,18.06,0.74,0,0,Raw,83,79.02,Blue crab
+45,Crab,ဂဏန်း,Seafood,Shellfish,97,20.2,1.08,0,0,Steamed,97,77.34,Shell removed
+46,Squid,ပြည်ကြီးငါး,Seafood,Cephalopod,92,15.58,1.38,3.08,0,Raw,92,78.55,Calamari
+47,Squid,ပြည်ကြီးငါး,Seafood,Cephalopod,175,17.94,7.48,7.79,0,Fried,175,63.95,Ring form
+48,Egg Chicken,ကြက်ဥ,Animal Products,Eggs,155,12.56,10.61,1.12,0,Raw_whole,155,74.62,Large egg
+49,Egg Chicken,ကြက်ဥ,Animal Products,Eggs,155,12.58,10.61,1.12,0,Boiled,155,74.62,Hard boiled
+50,Egg Chicken,ကြက်ဥ,Animal Products,Eggs,196,13.63,14.84,1.87,0,Fried,196,69.47,In oil
+51,Duck Egg,ဘဲဥ,Animal Products,Eggs,185,12.81,13.77,1.45,0,Raw,185,70.83,Larger than chicken
+52,Duck Egg,ဘဲဥ,Animal Products,Eggs,223,13.5,18.5,0,0,Salted_preserved,223,66.5,Century egg style
+53,Tofu,တို့ဟူး,Plant Protein,Soy,76,8.08,4.78,1.87,0.3,Raw_firm,76,84.55,Soybean curd
+54,Tofu,တို့ဟူး,Plant Protein,Soy,76,8.08,4.78,1.87,0.3,Fried,271,47.65,Deep fried cubes
+55,Tempeh,တန်ပဲ,Plant Protein,Fermented,192,18.54,10.8,9.39,9.4,Raw,192,59.65,Fermented soybean
+56,Yellow Peas,ပဲပုပ်,Legumes,Peas,352,24.55,1.16,60.37,25.5,Dried,352,8.69,Split peas
+57,Yellow Peas,ပဲပုပ်,Legumes,Peas,116,8.34,0.39,21.1,8.3,Boiled,116,69.49,Cooked
+58,Chickpeas,ကာလာပဲ,Legumes,Beans,378,20.47,6.04,62.95,12.2,Dried,378,7.68,Garbanzo beans
+59,Chickpeas,ကာလာပဲ,Legumes,Beans,164,8.86,2.59,27.42,7.6,Boiled,164,60.21,Cooked
+60,Black Beans,ပဲနက်,Legumes,Beans,341,21.6,1.42,62.36,15.5,Dried,341,11.02,Turtle beans
+61,Black Beans,ပဲနက်,Legumes,Beans,132,8.86,0.54,23.71,8.7,Boiled,132,65.74,Cooked
+62,Lentils,ပဲစင်းငယ်,Legumes,Lentils,352,24.63,1.06,63.35,10.7,Dried,352,8.26,Red or green
+63,Lentils,ပဲစင်းငယ်,Legumes,Lentils,116,9.02,0.38,20.13,7.9,Boiled,116,69.64,Cooked
+64,Mung Beans,ပဲတီ,Legumes,Beans,347,23.86,1.15,62.62,16.3,Dried,347,9.05,Green gram
+65,Mung Beans,ပဲတီ,Legumes,Beans,105,7.02,0.38,19.15,7.6,Boiled,105,71.27,Cooked
+66,Onion,ကြက်သွန်နီ,Vegetables,Allium,40,1.1,0.1,9.34,1.7,Raw,40,89.11,Common onion
+67,Onion,ကြက်သွန်နီ,Vegetables,Allium,44,1.36,0.19,10.15,1.4,Sauteed,44,87.86,In minimal oil
+68,Garlic,ကြက်သွန်ဖြူ,Vegetables,Allium,149,6.36,0.5,33.06,2.1,Raw,149,58.58,Fresh cloves
+69,Garlic,ကြက်သွန်ဖြူ,Vegetables,Allium,42,1.16,0.34,8.84,0.6,Cooked,42,88.11,Boiled
+70,Shallots,ကြက်သွန်မြိတ်,Vegetables,Allium,72,2.5,0.1,16.8,3.2,Raw,72,79.8,Myanmar shallot
+71,Tomato,ခရမ်းချဉ်သီး,Vegetables,Fruit-vegetable,18,0.88,0.2,3.89,1.2,Raw,18,94.52,Fresh
+72,Tomato,ခရမ်းချဉ်သီး,Vegetables,Fruit-vegetable,18,0.95,0.11,4.01,0.7,Cooked,18,93.87,Stewed
+73,Cabbage,ဂေါ်ဖီထုပ်,Vegetables,Cruciferous,25,1.28,0.1,5.8,2.5,Raw,25,92.18,Green cabbage
+74,Cabbage,ဂေါ်ဖီထုပ်,Vegetables,Cruciferous,23,1.27,0.06,5.51,1.9,Boiled,23,93.61,Cooked
+75,Chinese Cabbage,မုန်လာဥဖြူ,Vegetables,Cruciferous,16,1.2,0.2,3.23,1,Raw,16,94.39,Napa cabbage
+76,Spinach,ဟင်းနုနွယ်ရွက်,Vegetables,Leafy,23,2.86,0.39,3.63,2.2,Raw,23,91.4,Fresh leaves
+77,Spinach,ဟင်းနုနွယ်ရွက်,Vegetables,Leafy,23,2.97,0.26,3.75,2.4,Boiled,23,91.21,Cooked
+78,Water Spinach,ကန်စွန်း,Vegetables,Leafy,19,2.6,0.2,3.14,2.1,Raw,19,92.32,Kangkong
+79,Water Spinach,ကန်စွန်း,Vegetables,Leafy,20,2.08,0.87,3.18,2,Stir_fried,20,91.73,With garlic
+80,Mustard Greens,မုန်ညင်းရွက်,Vegetables,Leafy,27,2.86,0.42,4.67,3.2,Raw,27,90.7,Fresh
+81,Mustard Greens,မုန်ညင်းရွက်,Vegetables,Leafy,26,2.26,0.47,4.51,2,Pickled,26,91.87,Fermented
+82,Okra,ရုံးပတီသီး,Vegetables,Pod,33,1.93,0.19,7.45,3.2,Raw,33,89.58,Lady's finger
+83,Okra,ရုံးပတီသီး,Vegetables,Pod,22,1.87,0.21,4.51,2.5,Boiled,22,92.57,Cooked
+84,Eggplant,ခရမ်းသီး,Vegetables,Nightshade,25,0.98,0.18,5.88,3,Raw,25,92.3,Brinjal
+85,Eggplant,ခရမ်းသီး,Vegetables,Nightshade,35,0.83,0.23,8.73,2.5,Grilled,35,89.67,Roasted
+86,Bottle Gourd,ဗူးသီး,Vegetables,Gourd,14,0.62,0.02,3.39,0.5,Raw,14,95.54,Calabash
+87,Bottle Gourd,ဗူးသီး,Vegetables,Gourd,15,0.6,0.02,3.69,0.8,Boiled,15,95.23,Cooked
+88,Pumpkin,ရွှေဖရုံသီး,Vegetables,Gourd,26,1,0.1,6.5,0.5,Raw,26,91.6,Orange pumpkin
+89,Pumpkin,ရွှေဖရုံသီး,Vegetables,Gourd,20,0.72,0.07,4.9,1.1,Boiled,20,93.69,Cooked
+90,Cucumber,သခွားသီး,Vegetables,Gourd,16,0.65,0.11,3.63,0.5,Raw,16,95.23,Fresh
+91,Bitter Gourd,ကြက်ဟင်းခါးသီး,Vegetables,Gourd,17,1,0.17,3.7,2.8,Raw,17,94.03,Bitter melon
+92,Bitter Gourd,ကြက်ဟင်းခါးသီး,Vegetables,Gourd,19,0.84,0.18,4.32,2,Stir_fried,19,93.95,With spices
+93,Long Bean,ပဲရှည်,Vegetables,Legume,47,2.8,0.4,8.35,2.6,Raw,47,88.89,Yardlong bean
+94,Long Bean,ပဲရှည်,Vegetables,Legume,47,2.53,0.1,9.85,3.3,Boiled,47,87.13,Cooked
+95,Green Bean,ပဲတိုင်း,Vegetables,Legume,31,1.83,0.22,6.97,2.7,Raw,31,90.32,String beans
+96,Green Bean,ပဲတိုင်း,Vegetables,Legume,35,1.89,0.28,7.88,3.2,Boiled,35,89.21,Cooked
+97,Carrot,မုန်လာဥနီ,Vegetables,Root,41,0.93,0.24,9.58,2.8,Raw,41,88.29,Orange carrot
+98,Carrot,မုန်လာဥနီ,Vegetables,Root,35,0.76,0.18,8.22,3,Boiled,35,90.17,Cooked
+99,White Radish,မုန်လာဥဖြူ,Vegetables,Root,16,0.68,0.1,3.4,1.6,Raw,16,95.27,Daikon
+100,Potato,အာလူး,Vegetables,Tuber,77,2.05,0.09,17.49,2.1,Raw,77,79.25,Fresh
+101,Potato,အာလူး,Vegetables,Tuber,87,1.87,0.1,20.13,1.8,Boiled,87,77,With skin
+102,Potato,အာလူး,Vegetables,Tuber,93,2.5,0.13,21.15,2.2,Baked,93,75.42,Oven baked
+103,Potato,အာလူး,Vegetables,Tuber,312,3.43,14.73,41.44,3.3,Fried,312,38.55,French fries
+104,Sweet Potato,ကန်စွန်းဥ,Vegetables,Tuber,86,1.57,0.05,20.12,3,Raw,86,77.28,Orange flesh
+105,Sweet Potato,ကန်စွန်းဥ,Vegetables,Tuber,90,2.01,0.15,20.71,3.3,Baked,90,75.78,Roasted
+106,Taro,ပိန်းဥ,Vegetables,Tuber,112,1.5,0.2,26.46,4.1,Raw,112,70.64,Colocasia
+107,Taro,ပိန်းဥ,Vegetables,Tuber,142,0.52,0.11,34.6,5.1,Boiled,142,63.79,Cooked
+108,Bamboo Shoots,ဝါးပုပ်,Vegetables,Shoot,27,2.6,0.3,5.2,2.2,Raw_fresh,27,91,Young shoots
+109,Bamboo Shoots,ဝါးပုပ်,Vegetables,Shoot,19,1.72,0.4,3.13,1.6,Canned,19,94,Preserved
+110,Bamboo Shoots,ဝါးပုပ်,Vegetables,Shoot,28,1.84,3.26,2.02,1.7,Fermented,28,91.58,Pickled
+111,Corn,ပြောင်းဖူး,Vegetables,Grain,86,3.27,1.35,18.7,2,Raw,86,76,Sweet corn
+112,Corn,ပြောင်းဖူး,Vegetables,Grain,96,3.41,1.5,20.98,2.4,Boiled,96,73.41,On cob
+113,Baby Corn,ပြောင်းဖူးငယ်,Vegetables,Grain,26,2.5,0.2,4.7,2,Raw,26,91.8,Young corn
+114,Green Papaya,သင်္ဘောသီးစိမ်း,Vegetables,Fruit-vegetable,32,0.61,0.14,7.82,1.8,Raw,32,90.8,Unripe
+115,Green Papaya,သင်္ဘောသီးစိမ်း,Vegetables,Fruit-vegetable,32,0.61,0.14,7.82,1.8,Salad,32,90.8,Som tam style
+116,Banana Stem,ငှက်ပျောပင်စည်,Vegetables,Stem,43,1.5,0.3,10.62,2.4,Raw,43,86.56,Inner core
+117,Banana Flower,ငှက်ပျောပွင့်,Vegetables,Flower,23,1.28,0.5,5.7,5.7,Raw,23,91.43,Heart
+118,Drumstick,ဒန့်သလုံး,Vegetables,Pod,37,2.1,0.2,8.53,3.2,Raw,37,88.2,Moringa pods
+119,Drumstick Leaves,ဒန့်သလုံးရွက်,Vegetables,Leafy,64,9.4,1.4,8.28,2,Raw_fresh,64,78.66,Moringa leaves
+120,Lime Leaves,သပြေရွက်,Herbs,Leaf,111,3.7,1.8,23.2,10.8,Fresh,111,59.7,Kaffir lime
+121,Lemongrass,စပါး,Herbs,Grass,99,1.82,0.49,25.31,2.7,Raw,99,70.58,Cymbopogon
+122,Ginger,ဂျင်း,Herbs,Root,80,1.82,0.75,17.77,2,Raw,80,78.89,Fresh root
+123,Turmeric,နနွင်း,Herbs,Root,312,9.68,3.25,67.14,22.7,Dried_powder,312,12.85,Ground
+124,Turmeric,နနွင်း,Herbs,Root,64,1.8,0.94,13.82,2.1,Fresh,64,82.5,Raw root
+125,Coriander Leaves,နံနံပင်,Herbs,Leaf,23,2.13,0.52,3.67,2.8,Fresh,23,92.21,Cilantro
+126,Mint,ပူစီနံရွက်,Herbs,Leaf,44,3.29,0.73,8.41,6.8,Fresh,44,85.55,Spearmint
+127,Basil,ပင်စိမ်းမွှေး,Herbs,Leaf,23,3.15,0.64,2.65,1.6,Fresh,23,92.06,Sweet basil
+128,Curry Leaves,သနပ်ရွက်,Herbs,Leaf,108,6.1,1,18.7,6.4,Fresh,108,66.3,Murraya
+129,Chili Green,ငရုတ်သီးစိမ်း,Spices,Pepper,40,1.87,0.44,8.81,1.5,Raw,40,87.74,Fresh
+130,Chili Red,ငရုတ်သီးနီ,Spices,Pepper,40,1.87,0.44,8.81,1.5,Raw,40,87.74,Fresh
+131,Chili Dried,ငရုတ်သီးခြောက်,Spices,Pepper,282,10.58,5.81,69.86,34.8,Dried,282,7.79,Red pepper
+132,Black Pepper,ငရုတ်ကောင်းမှုန့်,Spices,Pepper,251,10.39,3.26,63.95,25.3,Ground,251,12.46,Piper nigrum
+133,Tamarind,မန်ကျည်းသီး,Condiments,Fruit,239,2.8,0.6,62.5,5.1,Pulp,239,31.4,Sour paste
+134,Fish Sauce,ငပိရည်,Condiments,Fermented,35,5.06,0,2.86,0,Liquid,35,88.62,Nam pla
+135,Shrimp Paste,ငပိ,Condiments,Fermented,179,34.9,2,10,0,Paste,179,48.3,Ngapi
+136,Soy Sauce,ပဲငံပြာရည်,Condiments,Fermented,53,5.57,0.04,4.93,0.8,Liquid,53,71.84,Dark
+137,Coconut,အုန်းသီး,Nuts/Seeds,Fruit,354,3.33,33.49,15.23,9,Meat_fresh,354,47,White meat
+138,Coconut Milk,အုန်းနို့,Nuts/Seeds,Liquid,230,2.29,23.84,5.54,2.2,Canned,230,67.62,First press
+139,Coconut Oil,အုန်းဆီ,Oils,Vegetable,862,0,100,0,0,Pure,862,0.01,Virgin
+140,Peanuts,မြေပဲ,Nuts/Seeds,Legume,567,25.8,49.24,16.13,8.5,Raw,567,6.5,Groundnuts
+141,Peanuts,မြေပဲ,Nuts/Seeds,Legume,585,23.68,49.66,21.51,8,Roasted,585,1.55,Dry roasted
+142,Peanuts,မြေပဲ,Nuts/Seeds,Legume,599,28.03,52.5,15.26,9.5,Fried_salted,599,1.8,Oil roasted
+143,Sesame Seeds,နှမ်း,Nuts/Seeds,Seed,573,17.73,49.67,23.45,11.8,Raw,573,4.69,White
+144,Sesame Oil,နှမ်းဆီ,Oils,Vegetable,884,0,100,0,0,Pure,884,0,From seeds
+145,Cashew Nuts,သီဟိုဠ်သီး,Nuts/Seeds,Nut,553,18.22,43.85,30.19,3.3,Raw,553,5.2,Tree nut
+146,Cashew Nuts,သီဟိုဠ်သီး,Nuts/Seeds,Nut,574,15.31,46.35,32.69,3,Roasted_salted,574,1.7,Processed
+147,Sunflower Seeds,နေကြာစေ့,Nuts/Seeds,Seed,584,20.78,51.46,20,8.6,Raw_kernels,584,4.73,Hulled
+148,Pumpkin Seeds,ဖရုံစေ့,Nuts/Seeds,Seed,559,30.23,49.05,10.71,6,Raw,559,5.23,Pepitas
+149,Banana,ငှက်ပျောသီး,Fruits,Tropical,89,1.09,0.33,22.84,2.6,Raw_ripe,89,74.91,Cavendish
+150,Banana,ငှက်ပျောသီး,Fruits,Tropical,122,1.3,0.37,31.89,2.3,Plantain_raw,122,65.28,Cooking banana
+151,Mango,သရက်သီး,Fruits,Tropical,60,0.82,0.38,14.98,1.6,Raw_ripe,60,83.46,Fresh
+152,Papaya,သင်္ဘောသီး,Fruits,Tropical,43,0.47,0.26,10.82,1.7,Raw_ripe,43,88.06,Orange flesh
+153,Pineapple,နာနတ်သီး,Fruits,Tropical,50,0.54,0.12,13.12,1.4,Raw,50,86,Fresh chunks
+154,Watermelon,ဖရဲသီး,Fruits,Melon,30,0.61,0.15,7.55,0.4,Raw,30,91.45,Red flesh
+155,Orange,လိမ္မော်သီး,Fruits,Citrus,47,0.94,0.12,11.75,2.4,Raw,47,86.75,Sweet orange
+156,Lime,သံပုရာသီး,Fruits,Citrus,30,0.7,0.2,10.54,2.8,Raw,30,88.26,Key lime
+157,Guava,မာလကာသီး,Fruits,Tropical,68,2.55,0.95,14.32,5.4,Raw,68,80.8,Pink flesh
+158,Pomelo,ကျွဲကောသီး,Fruits,Citrus,38,0.76,0.04,9.62,1,Raw,38,89.1,Shaddock
+159,Durian,ဒူးရင်းသီး,Fruits,Tropical,147,1.47,5.33,27.09,3.8,Raw,147,64.99,King of fruits
+160,Rambutan,ချိုမန်ကျည်းသီး,Fruits,Tropical,82,0.65,0.21,20.87,0.9,Raw,82,78.04,Hairy fruit
+161,Longan,လုံချည်သီး,Fruits,Tropical,60,1.31,0.1,15.14,1.1,Raw,60,82.75,Dragon eye
+162,Star Apple,အောင်သပြေသီး,Fruits,Tropical,67,0.72,1.16,15.49,3.3,Raw,67,81.92,Cainito
+163,Sugar Cane,ကြံ,Beverages,Plant,269,0,0,73.4,0,Juice_fresh,269,26.56,Pure juice
+164,Palm Sugar,ထန်းလျက်,Sweeteners,Natural,375,0.12,0,97.45,0,Jaggery,375,1.79,Toddy palm
+165,Tea Leaves,လက်ဖက်ရွက်,Beverages,Fermented,22,1.3,0.6,4.5,3.7,Pickled,22,89.9,Lahpet
+166,Green Tea,လက်ဖက်စိမ်း,Beverages,Tea,1,0.22,0,0,0,Brewed,1,99.93,No sugar
+167,Mohinga Soup,မုန့်ဟင်းခါး,Dishes,Soup,45,4.2,1.8,3.5,0.8,Bowl_prepared,45,88,Fish soup
+168,Shan Noodles,ရှမ်းခေါက်ဆွဲ,Dishes,Noodles,142,8.5,4.3,18.2,1.5,Bowl_prepared,142,67.5,With chicken
+169,Tea Leaf Salad,လက်ဖက်သုတ်,Dishes,Salad,89,3.2,6.1,5.8,2.4,Serving,89,78.5,Lahpet thoke
+170,Samosa,စမူဆာ,Snacks,Fried,308,8.5,17.5,31.2,3.5,Piece_fried,308,39.3,Vegetable filling
+171,Spring Roll,ကော်ပြန့်ကြော်,Snacks,Fried,282,6.8,16.4,28.5,1.8,Piece_fried,282,45.5,Vegetable
+172,Paratha,ပလာတာ,Bread,Flatbread,326,8.67,15.59,40.27,3.6,Plain_fried,326,32.87,Indian bread
+173,Naan,နမ်း,Bread,Flatbread,262,8.91,5.1,45.36,2.2,Plain_baked,262,38.99,Tandoor bread
+174,Yogurt,ဒိန်ချဉ်,Dairy,Fermented,61,3.47,3.25,4.66,0,Plain_whole,61,87.9,Full fat
+175,Milk,နို့,Dairy,Liquid,42,3.37,0.97,4.99,0,Low_fat_1%,42,89.92,Cow milk
+176,Butter,ထောပတ်,Dairy,Fat,717,0.85,81.11,0.06,0,Salted,717,16.17,Dairy butter
+177,Cheese,ဒိန်ခဲ,Dairy,Fermented,402,25.18,33.14,1.28,0,Cheddar,402,36.75,Hard cheese
+178,Cooking Oil,ဆီ,Oils,Vegetable,884,0,100,0,0,Peanut,884,0,Common oil
+179,Salt,ဆား,Seasonings,Mineral,0,0,0,0,0,Table,0,0.2,Sodium chloride
+180,Sugar,သကြား,Sweeteners,Refined,387,0,0,99.98,0,White_granulated,387,0.02,Sucrose
