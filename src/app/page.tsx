@@ -1,9 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { CalorieRing } from '@/components/dashboard/calorie-ring'
 import { MacroBars } from '@/components/dashboard/macro-bars'
-import { SmartDishInput } from '@/components/search/smart-dish-input'
 import { QuickLogTemplates } from '@/components/meal/quick-log-templates'
 import {
   Flame,
@@ -11,11 +11,14 @@ import {
   Award,
   Calendar,
   Plus,
-  ChevronRight
+  ChevronRight,
+  Utensils,
+  Sparkles
 } from 'lucide-react'
 import { cn, getMealEmoji, formatDate } from '@/lib/utils'
 
 export default function HomePage() {
+  const router = useRouter()
   const [language, setLanguage] = useState<'mm' | 'en'>('mm')
 
   // Mock user data (will be replaced with real data from Supabase)
@@ -54,22 +57,6 @@ export default function HomePage() {
       time: '01:30 PM'
     }
   ]
-
-  const handleExtractIngredients = async (dishText: string) => {
-    try {
-      const res = await fetch('/api/ai/extract-ingredients', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: dishText, language })
-      })
-
-      const data = await res.json()
-      console.log('Extracted ingredients:', data)
-      // TODO: Show ingredients selection UI
-    } catch (error) {
-      console.error('Extraction failed:', error)
-    }
-  }
 
   const handleSelectTemplate = (template: any) => {
     console.log('Selected template:', template)
@@ -173,17 +160,31 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Smart Input Section */}
-        <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-lg mb-8">
-          <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-            {language === 'mm' ? 'ဘာစားလဲ ရိုက်ထည့်ပါ' : 'Log Your Meal'}
-          </h3>
-          <SmartDishInput
-            onExtract={handleExtractIngredients}
-            language={language}
-            placeholder={language === 'mm' ? 'ဥပမာ: ကြက်သား နဲ့ အာလူး ဟင်း' : 'Example: Chicken and potato curry'}
-          />
-        </div>
+        {/* Quick Add Meal Button */}
+        <button
+          onClick={() => router.push('/add-meal')}
+          className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-3xl p-8 shadow-xl transition-all transform hover:scale-[1.02] mb-8"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="bg-white/20 p-4 rounded-2xl">
+                <Utensils className="w-8 h-8" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-2xl font-bold mb-1">
+                  {language === 'mm' ? 'အစားအသောက် ထည့်မည်' : 'Add Your Meal'}
+                </h3>
+                <p className="text-white/80 text-sm">
+                  {language === 'mm' ? 'AI က အလိုအလျောက် ရှာဖွေပေးမည်' : 'AI will find ingredients automatically'}
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-6 h-6" />
+              <ChevronRight className="w-6 h-6" />
+            </div>
+          </div>
+        </button>
 
         {/* Quick Templates */}
         <div className="bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-lg mb-8">
@@ -248,6 +249,7 @@ export default function HomePage() {
 
             {/* Add meal button */}
             <button
+              onClick={() => router.push('/add-meal')}
               className={cn(
                 "w-full p-4 rounded-xl",
                 "border-2 border-dashed border-gray-300 dark:border-gray-700",
@@ -265,6 +267,14 @@ export default function HomePage() {
           </div>
         </div>
       </main>
+
+      {/* Floating Action Button (Mobile) */}
+      <button
+        onClick={() => router.push('/add-meal')}
+        className="lg:hidden fixed bottom-20 right-4 w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 transition-all transform hover:scale-110"
+      >
+        <Plus className="w-8 h-8" />
+      </button>
 
       {/* Bottom Navigation (Mobile) */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50">
