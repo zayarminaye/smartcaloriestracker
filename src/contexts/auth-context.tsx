@@ -99,16 +99,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (!authData.user) return { error: new Error('No user returned from sign up') };
 
       // Create user profile
-      const { error: profileError } = await supabase.from('users').insert({
-        id: authData.user.id,
-        email: email,
-        full_name: profileData.full_name,
-        display_name: profileData.display_name,
-        preferred_language: profileData.preferred_language || 'mm',
-        daily_calorie_target: profileData.daily_calorie_target || 2000,
-        email_verified: false,
-        is_admin: false,
-      });
+      const { error: profileError } = await (supabase
+        .from('users') as any)
+        .insert({
+          id: authData.user.id,
+          email: email,
+          full_name: profileData.full_name,
+          display_name: profileData.display_name,
+          preferred_language: profileData.preferred_language || 'mm',
+          daily_calorie_target: profileData.daily_calorie_target || 2000,
+          email_verified: false,
+          is_admin: false,
+        });
 
       if (profileError) return { error: profileError };
 
