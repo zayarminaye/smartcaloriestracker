@@ -23,10 +23,10 @@ export async function GET() {
 
     // Fetch stats
     const [usersResult, ingredientsResult, verifiedResult, pendingResult] = await Promise.all([
-      supabase.from('users').select('id', { count: 'exact', head: true }),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).is('deleted_at', null),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).eq('verified', true).is('deleted_at', null),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).eq('verified', false).is('deleted_at', null),
+      (supabase.from('users') as any).select('id', { count: 'exact', head: true }),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).is('deleted_at', null),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).eq('verified', true).is('deleted_at', null),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).eq('verified', false).is('deleted_at', null),
     ]);
 
     return NextResponse.json({
