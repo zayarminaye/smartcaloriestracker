@@ -44,8 +44,8 @@ export async function PATCH(
       updateData.verified_at = null;
     }
 
-    const { data, error } = await supabase
-      .from('ingredients')
+    const { data, error } = await (supabase
+      .from('ingredients') as any)
       .update(updateData)
       .eq('id', id)
       .select()

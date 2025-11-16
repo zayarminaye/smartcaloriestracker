@@ -39,8 +39,8 @@ export async function PATCH(
     const body = await request.json();
     const { is_admin } = body;
 
-    const { data, error } = await supabase
-      .from('users')
+    const { data, error } = await (supabase
+      .from('users') as any)
       .update({
         is_admin,
         updated_at: new Date().toISOString(),

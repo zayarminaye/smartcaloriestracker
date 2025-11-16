@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Step 1: Create the meal record
-    const { data: meal, error: mealError } = await supabase
-      .from('meals')
+    const { data: meal, error: mealError } = await (supabase
+      .from('meals') as any)
       .insert({
         user_id,
         meal_name,
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 
     if (validMealItems.length === 0) {
       // Clean up the meal if no valid ingredients
-      await supabase.from('meals').delete().eq('id', meal.id)
+      await (supabase.from('meals') as any).delete().eq('id', meal.id)
       return NextResponse.json(
         { error: 'No valid ingredients with nutrition data found' },
         { status: 400 }
@@ -127,14 +127,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Insert meal items
-    const { error: itemsError } = await supabase
-      .from('meal_items')
+    const { error: itemsError } = await (supabase
+      .from('meal_items') as any)
       .insert(validMealItems)
 
     if (itemsError) {
       console.error('Meal items creation error:', itemsError)
       // Clean up the meal
-      await supabase.from('meals').delete().eq('id', meal.id)
+      await (supabase.from('meals') as any).delete().eq('id', meal.id)
       return NextResponse.json(
         { error: 'Failed to create meal items', details: itemsError.message },
         { status: 500 }
