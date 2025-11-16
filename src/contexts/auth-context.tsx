@@ -87,32 +87,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signUp = async (email: string, password: string, profileData: Partial<UserProfile>) => {
     try {
       // Sign up with Supabase Auth
+      // Profile data is passed via user_metadata and will be automatically
+      // inserted into the users table by the handle_new_user() database trigger
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            full_name: profileData.full_name,
+            display_name: profileData.display_name,
+            preferred_language: profileData.preferred_language || 'mm',
+            daily_calorie_target: profileData.daily_calorie_target || 2000,
+          },
         },
       });
 
       if (authError) return { error: authError };
       if (!authData.user) return { error: new Error('No user returned from sign up') };
 
-      // Create user profile
-      const { error: profileError } = await (supabase
-        .from('users') as any)
-        .insert({
-          id: authData.user.id,
-          email: email,
-          full_name: profileData.full_name,
-          display_name: profileData.display_name,
-          preferred_language: profileData.preferred_language || 'mm',
-          daily_calorie_target: profileData.daily_calorie_target || 2000,
-          email_verified: false,
-          is_admin: false,
-        });
-
-      if (profileError) return { error: profileError };
+      // Profile is now created automatically by database trigger
+      // No need to manually insert into users table
 
       return { error: null };
     } catch (error) {
