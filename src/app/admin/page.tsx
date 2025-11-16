@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from '@/hooks/use-translation';
 import { Users, Package, ShieldCheck, AlertCircle, TrendingUp } from 'lucide-react';
+import { ApiUsageCard } from '@/components/admin/api-usage-card';
 
 interface Stats {
   totalUsers: number;
@@ -171,6 +172,9 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
+      {/* API Usage */}
+      <ApiUsageCard />
     </div>
   );
 }
