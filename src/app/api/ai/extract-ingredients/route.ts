@@ -1,13 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { extractIngredientsFromText, estimateNutrition } from '@/lib/ai/gemini'
-import { supabase } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
+import { checkApiRateLimit, trackApiUsage } from '@/lib/api-usage-tracker'
 
 /**
  * AI-powered ingredient extraction from dish description
  * Uses Gemini AI to parse Myanmar text
  */
 export async function POST(request: NextRequest) {
+  const startTime = Date.now();
+  let userId: string | null = null;
+
   try {
+    const supabase = createClient();
+
+    // Get user ID for tracking
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id || null;
+
+    // Check rate limits
+    const rateLimit = await checkApiRateLimit();
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'Rate limit exceeded',
+          message: rateLimit.reason,
+          usage: rateLimit.usage,
+        },
+        { status: 429 }
+      );
+    }
+
     const { text, language = 'mm' } = await request.json()
 
     if (!text) {
@@ -62,6 +85,16 @@ export async function POST(request: NextRequest) {
       })
     )
 
+    // Track successful API usage
+    const responseTime = Date.now() - startTime;
+    await trackApiUsage({
+      endpoint: 'extract-ingredients',
+      user_id: userId,
+      request_type: 'ingredient_extraction',
+      success: true,
+      response_time_ms: responseTime,
+    });
+
     return NextResponse.json({
       dish_name: extraction.dish_name,
       cooking_method: extraction.cooking_method,
@@ -71,6 +104,18 @@ export async function POST(request: NextRequest) {
     })
   } catch (error: any) {
     console.error('Extraction error:', error)
+
+    // Track failed API usage
+    const responseTime = Date.now() - startTime;
+    await trackApiUsage({
+      endpoint: 'extract-ingredients',
+      user_id: userId,
+      request_type: 'ingredient_extraction',
+      success: false,
+      error_message: error.message,
+      response_time_ms: responseTime,
+    });
+
     return NextResponse.json(
       { error: 'Failed to extract ingredients', message: error.message },
       { status: 500 }

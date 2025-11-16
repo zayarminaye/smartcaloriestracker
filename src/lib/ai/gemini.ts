@@ -3,7 +3,9 @@ import { GoogleGenerativeAI } from '@google/generative-ai'
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
 // Using Gemini 2.5 Flash - Fast, efficient, great for Myanmar text
-// Free tier: Up to 15 requests per minute, 1 million requests per day
+// API Limits:
+//   - Free tier: 15 RPM (requests per minute), 1,500 RPD (requests per day)
+//   - Pay-as-you-go: 1,000 RPM, 4,000 RPD
 // Updated to Gemini 2.5 (Gemini 1.5 models retired in 2025)
 const model = genAI.getGenerativeModel({
   model: 'gemini-2.5-flash'

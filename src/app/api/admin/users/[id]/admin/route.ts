@@ -6,9 +6,10 @@ import { createClient } from '@/lib/supabase/server';
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const supabase = createClient();
 
     // Check if user is admin
@@ -28,7 +29,7 @@ export async function PATCH(
     }
 
     // Prevent user from removing their own admin status
-    if (params.id === user.id) {
+    if (id === user.id) {
       return NextResponse.json(
         { error: 'Cannot modify your own admin status' },
         { status: 400 }
@@ -44,7 +45,7 @@ export async function PATCH(
         is_admin,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', params.id)
+      .eq('id', id)
       .select()
       .single();
 
