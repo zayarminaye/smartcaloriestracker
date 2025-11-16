@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 import { CalorieRing } from '@/components/dashboard/calorie-ring'
 import { MacroBars } from '@/components/dashboard/macro-bars'
 import { QuickLogTemplates } from '@/components/meal/quick-log-templates'
+import { UserMenu } from '@/components/layout/user-menu'
+import { useAuth } from '@/contexts/auth-context'
+import { useTranslation } from '@/hooks/use-translation'
 import {
   Flame,
   TrendingUp,
@@ -20,7 +23,8 @@ import { cn, getMealEmoji, formatDate } from '@/lib/utils'
 
 export default function HomePage() {
   const router = useRouter()
-  const [language, setLanguage] = useState<'mm' | 'en'>('mm')
+  const { user, profile, loading: authLoading } = useAuth()
+  const { language, t } = useTranslation()
   const [todaysMeals, setTodaysMeals] = useState<any[]>([])
   const [dailyStats, setDailyStats] = useState({
     currentCalories: 0,
@@ -30,30 +34,38 @@ export default function HomePage() {
   })
   const [isLoading, setIsLoading] = useState(true)
 
-  // TODO: Get from authentication
-  const TEST_USER_ID = '00000000-0000-0000-0000-000000000000'
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/auth/login')
+    }
+  }, [authLoading, user, router])
+
   const userData = {
-    name: language === 'mm' ? 'စမ်းသပ်သူ' : 'Test User',
-    dailyTarget: 2000,
+    name: profile?.display_name || profile?.full_name || (language === 'mm' ? 'အသုံးပြုသူ' : 'User'),
+    dailyTarget: profile?.daily_calorie_target || 2000,
     currentCalories: dailyStats.currentCalories,
-    protein: { current: dailyStats.totalProtein, target: 150 },
-    fat: { current: dailyStats.totalFat, target: 67 },
-    carbs: { current: dailyStats.totalCarbs, target: 250 },
-    streak: 0,
-    level: 1,
-    points: 0
+    protein: { current: dailyStats.totalProtein, target: profile?.daily_protein_target_g || 150 },
+    fat: { current: dailyStats.totalFat, target: profile?.daily_fat_target_g || 67 },
+    carbs: { current: dailyStats.totalCarbs, target: profile?.daily_carbs_target_g || 250 },
+    streak: profile?.streak_days || 0,
+    level: profile?.level || 1,
+    points: profile?.points || 0
   }
 
   // Fetch today's meals on component mount
   useEffect(() => {
-    fetchTodaysMeals()
-  }, [])
+    if (user) {
+      fetchTodaysMeals()
+    }
+  }, [user])
 
   const fetchTodaysMeals = async () => {
+    if (!user) return
     setIsLoading(true)
     try {
       const today = new Date().toISOString().split('T')[0]
-      const response = await fetch(`/api/meals?user_id=${TEST_USER_ID}&date=${today}`)
+      const response = await fetch(`/api/meals?user_id=${user.id}&date=${today}`)
       const data = await response.json()
 
       if (response.ok && data.meals) {
@@ -113,13 +125,8 @@ export default function HomePage() {
               </p>
             </div>
 
-            {/* Language toggle */}
-            <button
-              onClick={() => setLanguage(language === 'mm' ? 'en' : 'mm')}
-              className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              {language === 'mm' ? 'EN' : 'မြန်မာ'}
-            </button>
+            {/* User Menu */}
+            <UserMenu />
           </div>
         </div>
       </header>
