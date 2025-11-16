@@ -23,7 +23,7 @@ export async function GET() {
     }
 
     // Get usage stats
-    const stats = await getUsageStats();
+    const stats: any = await getUsageStats();
 
     // Calculate limits and percentages
     const RPM_LIMIT = 15;
@@ -40,7 +40,7 @@ export async function GET() {
 
     return NextResponse.json({
       current: {
-        ...current,
+        ...(current as any),
         rpm_limit: RPM_LIMIT,
         rpd_limit: RPD_LIMIT,
         rpm_percentage: getUsagePercentage(current.requests_this_minute || 0, RPM_LIMIT),
