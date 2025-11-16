@@ -12,8 +12,8 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from('users')
+    const { data: profile } = await (supabase
+      .from('users') as any)
       .select('is_admin')
       .eq('id', user.id)
       .single<{ is_admin: boolean }>();
