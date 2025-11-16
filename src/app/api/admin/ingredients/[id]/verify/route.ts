@@ -22,7 +22,7 @@ export async function PATCH(
       .from('users') as any)
       .select('is_admin')
       .eq('id', user.id)
-      .single<{ is_admin: boolean }>();
+      .single();
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
