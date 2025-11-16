@@ -238,7 +238,9 @@ export function IngredientResults({
                         {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
                       </div>
                       {ingredient.database_match?.verified && (
-                        <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" title={language === 'mm' ? 'အတည်ပြုပြီး' : 'Verified'} />
+                        <span title={language === 'mm' ? 'အတည်ပြုပြီး' : 'Verified'}>
+                          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                        </span>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">

@@ -21,19 +21,21 @@ export async function trackApiUsage(record: ApiUsageRecord) {
   try {
     const supabase = createClient();
 
-    await supabase.from('api_usage').insert({
-      api_provider: record.api_provider || 'gemini',
-      model_name: record.model_name || 'gemini-2.5-flash',
-      endpoint: record.endpoint,
-      user_id: record.user_id || null,
-      request_tokens: record.request_tokens || 0,
-      response_tokens: record.response_tokens || 0,
-      total_tokens: record.total_tokens || 0,
-      request_type: record.request_type,
-      success: record.success,
-      error_message: record.error_message,
-      response_time_ms: record.response_time_ms,
-    });
+    await (supabase
+      .from('api_usage') as any)
+      .insert({
+        api_provider: record.api_provider || 'gemini',
+        model_name: record.model_name || 'gemini-2.5-flash',
+        endpoint: record.endpoint,
+        user_id: record.user_id || null,
+        request_tokens: record.request_tokens || 0,
+        response_tokens: record.response_tokens || 0,
+        total_tokens: record.total_tokens || 0,
+        request_type: record.request_type,
+        success: record.success,
+        error_message: record.error_message,
+        response_time_ms: record.response_time_ms,
+      });
   } catch (error) {
     // Don't throw - usage tracking should not break the main flow
     console.error('Failed to track API usage:', error);
@@ -52,7 +54,7 @@ export async function checkApiRateLimit(): Promise<{ allowed: boolean; reason?: 
     const { data: usage } = await supabase
       .from('v_current_api_usage')
       .select('*')
-      .single();
+      .single<{ requests_this_minute: number; requests_today: number }>();
 
     if (!usage) {
       return { allowed: true };
