@@ -1,16 +1,27 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SmartDishInput } from '@/components/search/smart-dish-input'
 import { IngredientResults } from '@/components/meal/ingredient-results'
+import { UserMenu } from '@/components/layout/user-menu'
+import { useAuth } from '@/contexts/auth-context'
+import { useTranslation } from '@/hooks/use-translation'
 import { ArrowLeft, Utensils } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 export default function AddMealPage() {
   const router = useRouter()
-  const [language, setLanguage] = useState<'mm' | 'en'>('mm')
+  const { user, loading: authLoading } = useAuth()
+  const { language } = useTranslation()
   const [extractionResult, setExtractionResult] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.push('/auth/login')
+    }
+  }, [authLoading, user, router])
 
   const handleExtractIngredients = async (dishText: string) => {
     setIsLoading(true)
@@ -35,17 +46,14 @@ export default function AddMealPage() {
   }
 
   const handleSave = async (adjustedIngredients: any) => {
+    if (!user) return
     setIsLoading(true)
     try {
-      // TODO: Get real user_id from authentication
-      // For now using a test user ID - this should come from Supabase Auth
-      const TEST_USER_ID = '00000000-0000-0000-0000-000000000000' // Replace with real auth
-
       const response = await fetch('/api/meals', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          user_id: TEST_USER_ID,
+          user_id: user.id,
           meal_name: extractionResult?.dish_name,
           meal_type: getMealTypeFromTime(), // Auto-detect based on time
           eaten_at: new Date().toISOString(),

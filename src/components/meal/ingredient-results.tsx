@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, AlertCircle, ChefHat, Scale, Plus, Minus, ArrowRight, X, PlusCircle } from 'lucide-react'
+import { Check, AlertCircle, ChefHat, Scale, Plus, Minus, ArrowRight, X, PlusCircle, ShieldCheck, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface IngredientResult {
@@ -19,6 +19,8 @@ interface IngredientResult {
     fat_g: number
     carbs_g: number
     fiber_g: number
+    verified?: boolean
+    data_source?: string
   } | null
   matched: boolean
 }
@@ -219,23 +221,40 @@ export function IngredientResults({
                   {/* Status Icon */}
                   <div className="flex-shrink-0">
                     {ingredient.matched ? (
-                      <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center" title={language === 'mm' ? 'ဒေတာဘေ့စ်မှ' : 'From Database'}>
                         <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
                       </div>
                     ) : (
-                      <div className="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                        <AlertCircle className="w-4 h-4 text-orange-600 dark:text-orange-400" />
+                      <div className="w-6 h-6 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center" title={language === 'mm' ? 'AI ခန့်မှန်းချက်' : 'AI Estimated'}>
+                        <Sparkles className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                       </div>
                     )}
                   </div>
 
-                  {/* Name */}
+                  {/* Name with Verification Badge */}
                   <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 dark:text-white text-sm truncate">
-                      {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
+                    <div className="flex items-center gap-1.5">
+                      <div className="font-medium text-gray-900 dark:text-white text-sm truncate">
+                        {language === 'mm' ? ingredient.name_mm : ingredient.name_en}
+                      </div>
+                      {ingredient.database_match?.verified && (
+                        <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" title={language === 'mm' ? 'အတည်ပြုပြီး' : 'Verified'} />
+                      )}
                     </div>
-                    <div className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                      {language === 'mm' ? ingredient.name_en : ingredient.name_mm}
+                    <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                      <span className="truncate">{language === 'mm' ? ingredient.name_en : ingredient.name_mm}</span>
+                      {ingredient.matched && ingredient.database_match?.data_source && (
+                        <>
+                          <span>•</span>
+                          <span className="text-gray-400">
+                            {ingredient.database_match.data_source === 'database'
+                              ? (language === 'mm' ? 'ဒေတာဘေ့စ်' : 'DB')
+                              : ingredient.database_match.data_source === 'ai_estimated'
+                              ? 'AI'
+                              : ingredient.database_match.data_source}
+                          </span>
+                        </>
+                      )}
                     </div>
                   </div>
 

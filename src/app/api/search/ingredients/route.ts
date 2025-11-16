@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 
 /**
  * Search ingredients by name (Myanmar or English)
+ * Regular users see only verified ingredients
+ * Admins see all ingredients
  */
 export async function GET(request: NextRequest) {
   try {
@@ -16,8 +18,24 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Search in both Myanmar and English names
-    const { data: results, error } = await supabase
+    const supabase = createClient()
+
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+
+    // Check if user is admin
+    let isAdmin = false
+    if (user) {
+      const { data: profile } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+      isAdmin = profile?.is_admin || false
+    }
+
+    // Build query
+    let queryBuilder = supabase
       .from('ingredients')
       .select(`
         id,
@@ -28,10 +46,19 @@ export async function GET(request: NextRequest) {
         protein_g,
         fat_g,
         carbs_g,
-        fiber_g
+        fiber_g,
+        verified,
+        data_source
       `)
       .or(`name_myanmar.ilike.%${query}%,name_english.ilike.%${query}%`)
       .is('deleted_at', null)
+
+    // Filter by verified status for non-admin users
+    if (!isAdmin) {
+      queryBuilder = queryBuilder.eq('verified', true)
+    }
+
+    const { data: results, error } = await queryBuilder
       .order('usage_count', { ascending: false })
       .limit(20)
 
