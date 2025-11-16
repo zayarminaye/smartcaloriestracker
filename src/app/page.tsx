@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { CalorieRing } from '@/components/dashboard/calorie-ring'
 import { MacroBars } from '@/components/dashboard/macro-bars'
 import { QuickLogTemplates } from '@/components/meal/quick-log-templates'
-import { UserMenu } from '@/components/layout/user-menu'
+import { Navbar } from '@/components/layout/navbar'
+import { BottomNav } from '@/components/layout/bottom-nav'
 import { useAuth } from '@/contexts/auth-context'
 import { useTranslation } from '@/hooks/use-translation'
 import {
@@ -19,7 +20,7 @@ import {
   Sparkles,
   Loader2
 } from 'lucide-react'
-import { cn, getMealEmoji, formatDate } from '@/lib/utils'
+import { cn, getMealEmoji } from '@/lib/utils'
 
 export default function HomePage() {
   const router = useRouter()
@@ -112,24 +113,8 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-lg bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                {language === 'mm' ? 'ကယ်လိုရီ ခြေရာခံ' : 'Calorie Tracker'}
-              </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {formatDate(new Date(), language)}
-              </p>
-            </div>
-
-            {/* User Menu */}
-            <UserMenu />
-          </div>
-        </div>
-      </header>
+      {/* Navigation */}
+      <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 py-6 pb-24">
         {/* Stats Overview */}
@@ -343,35 +328,13 @@ export default function HomePage() {
       {/* Floating Action Button (Mobile) */}
       <button
         onClick={() => router.push('/add-meal')}
-        className="lg:hidden fixed bottom-20 right-4 w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 transition-all transform hover:scale-110"
+        className="md:hidden fixed bottom-20 right-4 w-16 h-16 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 transition-all transform hover:scale-110"
       >
         <Plus className="w-8 h-8" />
       </button>
 
       {/* Bottom Navigation (Mobile) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 z-50">
-        <div className="grid grid-cols-4 gap-1 p-2">
-          {[
-            { icon: '🏠', label: language === 'mm' ? 'မူလ' : 'Home', active: true },
-            { icon: '📊', label: language === 'mm' ? 'ခြေရာခံ' : 'Track', active: false },
-            { icon: '📈', label: language === 'mm' ? 'အစီရင်ခံ' : 'Reports', active: false },
-            { icon: '👤', label: language === 'mm' ? 'ကျွန်ုပ်' : 'Profile', active: false },
-          ].map((item, i) => (
-            <button
-              key={i}
-              className={cn(
-                "flex flex-col items-center gap-1 p-3 rounded-xl transition-colors",
-                item.active
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-              )}
-            >
-              <span className="text-2xl">{item.icon}</span>
-              <span className="text-xs font-medium">{item.label}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
+      <BottomNav />
     </div>
   )
 }

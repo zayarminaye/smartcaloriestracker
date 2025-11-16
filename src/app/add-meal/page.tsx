@@ -3,10 +3,11 @@
 import { useState, useEffect } from 'react'
 import { SmartDishInput } from '@/components/search/smart-dish-input'
 import { IngredientResults } from '@/components/meal/ingredient-results'
-import { UserMenu } from '@/components/layout/user-menu'
+import { Navbar } from '@/components/layout/navbar'
+import { BottomNav } from '@/components/layout/bottom-nav'
 import { useAuth } from '@/contexts/auth-context'
 import { useTranslation } from '@/hooks/use-translation'
-import { ArrowLeft, Utensils } from 'lucide-react'
+import { Utensils } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 export default function AddMealPage() {
@@ -95,44 +96,12 @@ export default function AddMealPage() {
     setExtractionResult(null)
   }
 
-  const handleGoHome = () => {
-    router.push('/')
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-      {/* Header */}
-      <header className="sticky top-0 z-40 backdrop-blur-lg bg-white/80 dark:bg-gray-900/80 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={handleGoHome}
-              className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-medium">
-                {language === 'mm' ? 'နောက်သို့' : 'Back'}
-              </span>
-            </button>
+      {/* Navigation */}
+      <Navbar />
 
-            <div className="flex items-center gap-3">
-              <Utensils className="w-6 h-6 text-primary" />
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                {language === 'mm' ? 'အစားအသောက် ထည့်မည်' : 'Add Meal'}
-              </h1>
-            </div>
-
-            <button
-              onClick={() => setLanguage(language === 'mm' ? 'en' : 'mm')}
-              className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-            >
-              {language === 'mm' ? 'EN' : 'မြန်မာ'}
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto px-4 py-8 pb-24">
         {!extractionResult ? (
           /* Input State */
           <div className="space-y-6">
@@ -234,6 +203,9 @@ export default function AddMealPage() {
           />
         )}
       </main>
+
+      {/* Bottom Navigation */}
+      <BottomNav />
     </div>
   )
 }
