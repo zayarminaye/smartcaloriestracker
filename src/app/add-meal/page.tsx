@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 export default function AddMealPage() {
   const router = useRouter()
   const { user, loading: authLoading } = useAuth()
-  const { language } = useTranslation()
+  const { language, setLanguage } = useTranslation()
   const [extractionResult, setExtractionResult] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(false)
 
