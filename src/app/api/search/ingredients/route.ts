@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         .from('users')
         .select('is_admin')
         .eq('id', user.id)
-        .single()
+        .single<{ is_admin: boolean }>()
       isAdmin = profile?.is_admin || false
     }
 

@@ -15,7 +15,7 @@ export async function GET() {
       .from('users')
       .select('is_admin')
       .eq('id', user.id)
-      .single();
+      .single<{ is_admin: boolean }>();
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
