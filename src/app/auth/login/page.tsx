@@ -25,12 +25,15 @@ export default function LoginPage() {
       const { error: signInError } = await signIn(email, password);
       if (signInError) {
         setError(signInError.message || t.auth.loginError);
+        setLoading(false);
       } else {
-        router.push('/');
+        // Wait a moment for auth state to update, then redirect
+        setTimeout(() => {
+          router.replace('/');
+        }, 500);
       }
     } catch (err: any) {
       setError(err.message || t.auth.loginError);
-    } finally {
       setLoading(false);
     }
   };
