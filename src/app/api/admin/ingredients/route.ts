@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
     const filter = searchParams.get('filter'); // 'all', 'verified', 'pending'
     const search = searchParams.get('search');
 
-    let query = supabase
-      .from('ingredients')
+    let query = (supabase
+      .from('ingredients') as any)
       .select(`
         id,
         name_english,
