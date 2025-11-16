@@ -14,6 +14,9 @@ interface UserProfile {
   email_verified: boolean;
   preferred_language: 'mm' | 'en';
   daily_calorie_target: number;
+  daily_protein_target_g: number | null;
+  daily_fat_target_g: number | null;
+  daily_carbs_target_g: number | null;
   points: number;
   level: number;
   streak_days: number;
@@ -41,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const { data, error } = await supabase
         .from('users')
-        .select('id, email, full_name, display_name, avatar_url, is_admin, email_verified, preferred_language, daily_calorie_target, points, level, streak_days')
+        .select('id, email, full_name, display_name, avatar_url, is_admin, email_verified, preferred_language, daily_calorie_target, daily_protein_target_g, daily_fat_target_g, daily_carbs_target_g, points, level, streak_days')
         .eq('id', userId)
         .single();
 
