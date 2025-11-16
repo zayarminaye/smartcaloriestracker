@@ -64,8 +64,8 @@ export default function ProfilePage() {
     setIsSaving(true);
     try {
       const supabase = createClient();
-      const { error } = await supabase
-        .from('users')
+      const { error } = await (supabase
+        .from('users') as any)
         .update({
           full_name: formData.full_name,
           display_name: formData.display_name,
