@@ -12,18 +12,18 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from('users')
+    const { data: profile } = await (supabase
+      .from('users') as any)
       .select('is_admin')
       .eq('id', user.id)
-      .single<{ is_admin: boolean }>();
+      .single();
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     // Get usage stats
-    const stats = await getUsageStats();
+    const stats: any = await getUsageStats();
 
     // Calculate limits and percentages
     const RPM_LIMIT = 15;
@@ -40,7 +40,7 @@ export async function GET() {
 
     return NextResponse.json({
       current: {
-        ...current,
+        ...(current as any),
         rpm_limit: RPM_LIMIT,
         rpd_limit: RPD_LIMIT,
         rpm_percentage: getUsagePercentage(current.requests_this_minute || 0, RPM_LIMIT),

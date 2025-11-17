@@ -11,11 +11,11 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from('users')
+    const { data: profile } = await (supabase
+      .from('users') as any)
       .select('is_admin')
       .eq('id', user.id)
-      .single<{ is_admin: boolean }>();
+      .single();
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
@@ -23,10 +23,10 @@ export async function GET() {
 
     // Fetch stats
     const [usersResult, ingredientsResult, verifiedResult, pendingResult] = await Promise.all([
-      supabase.from('users').select('id', { count: 'exact', head: true }),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).is('deleted_at', null),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).eq('verified', true).is('deleted_at', null),
-      supabase.from('ingredients').select('id', { count: 'exact', head: true }).eq('verified', false).is('deleted_at', null),
+      (supabase.from('users') as any).select('id', { count: 'exact', head: true }),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).is('deleted_at', null),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).eq('verified', true).is('deleted_at', null),
+      (supabase.from('ingredients') as any).select('id', { count: 'exact', head: true }).eq('verified', false).is('deleted_at', null),
     ]);
 
     return NextResponse.json({

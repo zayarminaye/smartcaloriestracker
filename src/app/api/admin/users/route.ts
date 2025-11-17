@@ -14,11 +14,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { data: profile } = await supabase
-      .from('users')
+    const { data: profile } = await (supabase
+      .from('users') as any)
       .select('is_admin')
       .eq('id', user.id)
-      .single<{ is_admin: boolean }>();
+      .single();
 
     if (!profile?.is_admin) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

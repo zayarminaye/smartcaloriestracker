@@ -26,17 +26,17 @@ export async function GET(request: NextRequest) {
     // Check if user is admin
     let isAdmin = false
     if (user) {
-      const { data: profile } = await supabase
-        .from('users')
+      const { data: profile } = await (supabase
+        .from('users') as any)
         .select('is_admin')
         .eq('id', user.id)
-        .single<{ is_admin: boolean }>()
+        .single()
       isAdmin = profile?.is_admin || false
     }
 
     // Build query
-    let queryBuilder = supabase
-      .from('ingredients')
+    let queryBuilder = (supabase
+      .from('ingredients') as any)
       .select(`
         id,
         name_english,
