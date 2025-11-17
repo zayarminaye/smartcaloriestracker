@@ -8,7 +8,6 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'Myanmar Calorie Tracker - ကယ်လိုရီ ခြေရာခံ',
   description: 'Smart calorie tracking app for Myanmar food with AI-powered ingredient detection',
-  manifest: '/manifest.json',
   themeColor: '#10b981',
   viewport: {
     width: 'device-width',
