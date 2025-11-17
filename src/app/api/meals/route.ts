@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase/client'
+import { createClient } from '@/lib/supabase/server'
 import { estimateNutrition } from '@/lib/ai/gemini'
 
 /**
@@ -15,6 +15,8 @@ export async function POST(request: NextRequest) {
       user_id
     } = await request.json()
 
+    console.log('Save meal request:', { meal_name, meal_type, user_id, ingredientCount: ingredients?.length })
+
     // Validate required fields
     if (!user_id || !ingredients || ingredients.length === 0) {
       return NextResponse.json(
@@ -22,6 +24,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    const supabase = createClient()
 
     // Step 1: Create the meal record
     const { data: meal, error: mealError } = await (supabase
@@ -43,6 +47,8 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       )
     }
+
+    console.log('Meal created:', meal.id)
 
     // Step 2: Create meal_items for each ingredient
     const mealItems = await Promise.all(
@@ -141,9 +147,11 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    console.log('Meal items created:', validMealItems.length)
+
     // Step 3: Fetch the complete meal with updated totals (triggers will have run)
-    const { data: completeMeal } = await supabase
-      .from('meals')
+    const { data: completeMeal } = await (supabase
+      .from('meals') as any)
       .select(`
         *,
         meal_items (
@@ -157,6 +165,8 @@ export async function POST(request: NextRequest) {
       `)
       .eq('id', meal.id)
       .single()
+
+    console.log('Meal saved successfully:', completeMeal?.id)
 
     return NextResponse.json({
       success: true,
@@ -187,9 +197,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    const supabase = createClient()
+
     // Get meals for the specified date
-    const { data: meals, error } = await supabase
-      .from('meals')
+    const { data: meals, error } = await (supabase
+      .from('meals') as any)
       .select(`
         *,
         meal_items (
