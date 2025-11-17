@@ -21,7 +21,7 @@ export function createClient() {
     if (!anonKey) {
       throw new Error('Missing both SUPABASE_SERVICE_ROLE_KEY and NEXT_PUBLIC_SUPABASE_ANON_KEY')
     }
-    return createSupabaseClient<Database>(supabaseUrl, anonKey, {
+    return createSupabaseClient<Database>(supabaseUrl!, anonKey, {
       auth: {
         autoRefreshToken: true,
         persistSession: false
@@ -29,7 +29,7 @@ export function createClient() {
     })
   }
 
-  return createSupabaseClient<Database>(supabaseUrl, supabaseServiceKey, {
+  return createSupabaseClient<Database>(supabaseUrl!, supabaseServiceKey, {
     auth: {
       autoRefreshToken: false,
       persistSession: false
