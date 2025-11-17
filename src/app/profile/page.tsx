@@ -59,12 +59,27 @@ export default function ProfilePage() {
   }, [profile]);
 
   const handleSave = async () => {
-    if (!user) return;
+    if (!user) {
+      console.error('No user found');
+      return;
+    }
 
     setIsSaving(true);
     try {
       const supabase = createClient();
-      const { error } = await (supabase
+
+      console.log('Updating profile for user:', user.id);
+      console.log('Update data:', {
+        full_name: formData.full_name,
+        display_name: formData.display_name,
+        daily_calorie_target: formData.daily_calorie_target,
+        daily_protein_target_g: formData.daily_protein_target_g,
+        daily_fat_target_g: formData.daily_fat_target_g,
+        daily_carbs_target_g: formData.daily_carbs_target_g,
+        preferred_language: formData.preferred_language,
+      });
+
+      const { data, error } = await (supabase
         .from('users') as any)
         .update({
           full_name: formData.full_name,
@@ -74,10 +89,17 @@ export default function ProfilePage() {
           daily_fat_target_g: formData.daily_fat_target_g,
           daily_carbs_target_g: formData.daily_carbs_target_g,
           preferred_language: formData.preferred_language,
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id);
+        .eq('id', user.id)
+        .select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
+
+      console.log('Profile updated successfully:', data);
 
       // Update language if changed
       if (formData.preferred_language !== language) {
@@ -89,9 +111,19 @@ export default function ProfilePage() {
 
       setIsEditing(false);
       alert(language === 'mm' ? 'သိမ်းဆည်းပြီးပါပြီ' : 'Profile updated successfully!');
-    } catch (error) {
-      console.error('Save error:', error);
-      alert(language === 'mm' ? 'သိမ်းဆည်း၍မရပါ' : 'Failed to update profile');
+    } catch (error: any) {
+      console.error('Save error details:', {
+        message: error?.message,
+        details: error?.details,
+        hint: error?.hint,
+        code: error?.code,
+      });
+      const errorMsg = error?.message || 'Unknown error';
+      alert(
+        language === 'mm'
+          ? `သိမ်းဆည်း၍မရပါ: ${errorMsg}`
+          : `Failed to update profile: ${errorMsg}`
+      );
     } finally {
       setIsSaving(false);
     }
