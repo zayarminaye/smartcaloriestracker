@@ -9,7 +9,8 @@
     "lint": "next lint",
     "db:migrate": "supabase migration up",
     "db:seed": "tsx scripts/seed-database.ts",
-    "db:reset": "supabase db reset"
+    "db:reset": "supabase db reset",
+    "db:import-ingredients": "tsx scripts/import_ingredients.ts"
   },
   "dependencies": {
     "next": "^15.1.4",
